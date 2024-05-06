@@ -11,7 +11,4 @@ public:
 	virtual ~Component() {}
 
 	void setEntity(Entity* e) { entity = e; }
-	Entity* getEntity() const { return entity; }
-
-	virtual void update() {}
 };

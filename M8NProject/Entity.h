@@ -38,16 +38,11 @@ private:
 	bool active = true;
 	std::vector<std::unique_ptr<Component>> components;
 
-	ComponentArray componentArray;
+	ComponentArray componentArray{};
 	ComponentBitSet componentBitSet;
 
 public:
 	Entity(Manager& mManager) : manager(mManager) {}
-
-	void update()
-	{
-		for (auto& c : components) c->update();
-	}
 
 	bool isActive() const { return active; }
 	void destroy() { active = false; }
