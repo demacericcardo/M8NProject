@@ -16,9 +16,6 @@
     <Filter Include="Header Files\ECS">
       <UniqueIdentifier>{678ca60f-37dc-4ad6-8a22-55f3ea91c41e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\ECS\Modules">
-      <UniqueIdentifier>{4545705e-fc67-4a11-b448-ccac569966d3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\ECS\Components">
       <UniqueIdentifier>{24554176-6502-4821-9211-338a0491d683}</UniqueIdentifier>
     </Filter>
@@ -33,6 +30,9 @@
     </Filter>
     <Filter Include="Header Files\ECS\Systems">
       <UniqueIdentifier>{edf279a1-1fc8-4a08-b07c-871ae8103d76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ECS\Base">
+      <UniqueIdentifier>{4545705e-fc67-4a11-b448-ccac569966d3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -60,13 +60,13 @@
       <Filter>Header Files\ECS</Filter>
     </ClInclude>
     <ClInclude Include="Component.h">
-      <Filter>Header Files\ECS\Modules</Filter>
+      <Filter>Header Files\ECS\Base</Filter>
     </ClInclude>
     <ClInclude Include="Entity.h">
-      <Filter>Header Files\ECS\Modules</Filter>
+      <Filter>Header Files\ECS\Base</Filter>
     </ClInclude>
     <ClInclude Include="Manager.h">
-      <Filter>Header Files\ECS\Modules</Filter>
+      <Filter>Header Files\ECS\Base</Filter>
     </ClInclude>
     <ClInclude Include="Vector2D.h">
       <Filter>Header Files\Generics</Filter>
@@ -76,6 +76,15 @@
     </ClInclude>
     <ClInclude Include="RenderComponent.h">
       <Filter>Header Files\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="System.h">
+      <Filter>Header Files\ECS\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderSystem.h">
+      <Filter>Header Files\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetManager.h">
+      <Filter>Header Files\ECS</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

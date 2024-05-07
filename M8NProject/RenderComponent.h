@@ -12,11 +12,6 @@ public:
 	int width, height = 32;
 	int srcX, srcY = 0;
 
-	RenderComponent(std::string texId)
-	{
-		textureID = texId;
-	};
-
 	RenderComponent(std::string texId, int w, int h, int x, int y)
 	{
 		textureID = texId;

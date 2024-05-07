@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "ECS.h"
 #include "TransformComponent.h"
+#include "AssetManager.h"
 
 Manager manager;
 
@@ -32,6 +33,12 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 		isRunning = false;
 	}
 
+	if (!AssetManager::getInstance().addTexture("playerTexture", "path/to/player/image.png"))
+	{
+		std::cout << "Failed to add texture to AssetManager.\n";
+		isRunning = false;
+		return;
+	}
 	player.addComponent<TransformComponent>(100, 100, 32, 32, 1);
 }
 
