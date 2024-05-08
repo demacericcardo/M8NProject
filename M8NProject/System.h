@@ -12,5 +12,5 @@ public:
 	System(Manager& mManager) : manager(mManager) {}
 	virtual ~System() {}
 
-	virtual void update(std::vector<std::unique_ptr<Entity>> entities) {};
+	virtual void update(std::vector<std::unique_ptr<Entity>>& entities) {};
 };

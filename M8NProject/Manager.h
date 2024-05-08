@@ -36,17 +36,23 @@ public:
 			std::end(entities));
 	}
 
-	Entity& addEntity()
+	template <typename T, typename... TArgs>
+	T& addEntity(TArgs&&... args)
 	{
-		auto uPtr = std::make_unique<Entity>(*this);
+		static_assert(std::is_base_of<Entity, T>::value, "T must be a derived class of Entity");
+
+		auto uPtr = std::make_unique<T>(std::forward<TArgs>(args)...);
 		auto* e = uPtr.get();
 		entities.emplace_back(std::move(uPtr));
 		return *e;
 	}
 
-	System& addSystem()
+	template <typename T, typename... TArgs>
+	T& addSystem(TArgs&&... args)
 	{
-		auto uPtr = std::make_unique<System>(*this);
+		static_assert(std::is_base_of<System, T>::value, "T must be a derived class of System");
+
+		auto uPtr = std::make_unique<T>(std::forward<TArgs>(args)...);
 		auto* e = uPtr.get();
 		systems.emplace_back(std::move(uPtr));
 		return *e;

@@ -1,14 +1,15 @@
 #include "Game.h"
 #include "ECS.h"
-#include "TransformComponent.h"
-#include "AssetManager.h"
+#include "Managers.h"
+#include "Entities.h"
+#include "Systems.h"
 
 Manager manager;
 
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 
-auto& player(manager.addEntity());
+const Uint8* Game::currentKeyStates = nullptr;
 
 Game::Game() : isRunning(false), window(nullptr) {}
 Game::~Game() {}
@@ -33,13 +34,17 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 		isRunning = false;
 	}
 
-	if (!AssetManager::getInstance().addTexture("playerTexture", "path/to/player/image.png"))
+	if (!AssetManager::getInstance().addTexture("playerTexture", "assets/pgUp.png"))
 	{
 		std::cout << "Failed to add texture to AssetManager.\n";
 		isRunning = false;
 		return;
 	}
-	player.addComponent<TransformComponent>(100, 100, 32, 32, 1);
+
+	RenderSystem& renderSystem = manager.addSystem<RenderSystem>(manager);
+	InputSystem& inputSystem = manager.addSystem<InputSystem>(manager);
+
+	Player& player = manager.addEntity<Player>(manager);
 }
 
 void Game::handleEvents()
@@ -55,17 +60,13 @@ void Game::handleEvents()
 	default:
 		break;
 	}
+
+	currentKeyStates = SDL_GetKeyboardState(NULL);
 }
 
 void Game::update() {
 	manager.refresh();
 	manager.update();
-}
-
-void Game::render()
-{
-	SDL_RenderClear(renderer);
-	SDL_RenderPresent(renderer);
 }
 
 void Game::clean()
