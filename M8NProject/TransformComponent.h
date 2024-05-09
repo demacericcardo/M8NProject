@@ -5,6 +5,7 @@
 class TransformComponent : public Component
 {
 public:
+	Vector2D previousPosition;
 	Vector2D position;
 
 	Vector2D velocity;

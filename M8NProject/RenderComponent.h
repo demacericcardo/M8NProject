@@ -6,8 +6,8 @@
 
 class RenderComponent : public Component
 {
-
 public:
+	SDL_Rect srcRect, destRect;
 	std::string textureID;
 
 	int height = 32;
@@ -15,15 +15,12 @@ public:
 	int scale = 1;
 
 	RenderComponent(std::string texId)
-	{
-		textureID = texId;
-	};
+		: textureID(texId) {}
 
-	RenderComponent(std::string texId, int h, int w, int s)
-	{
-		textureID = texId;
-		height = h;
-		width = w;
-		scale = s;
-	};
+	RenderComponent(std::string texId, SDL_Rect srcR, SDL_Rect destR)
+		: textureID(texId), srcRect(srcR), destRect(destR) {}
+
+	RenderComponent(std::string texId, SDL_Rect srcR, SDL_Rect destR, int h, int w, int s)
+		: textureID(texId), srcRect(srcR), destRect(destR), height(h), width(w), scale(s) {}
+
 };

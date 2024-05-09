@@ -13,12 +13,16 @@ public:
 	Game();
 	~Game();
 
-	void init(const char* title, int width, int height, bool fullscreen);
+	void init(const char* title, bool fullscreen);
 	void handleEvents();
 	void update();
 	void clean();
+	void loadTextures();
 
 	bool running() const { return isRunning; }
+
+	static const int SCREEN_WIDTH = 800;
+	static const int SCREEN_HEIGHT = 640;
 
 	static const Uint8* currentKeyStates;
 

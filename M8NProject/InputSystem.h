@@ -17,10 +17,11 @@ public:
 	{
 		for (auto& entity : entities)
 		{
-			if (entity->hasComponent<InputComponent>() && entity->hasComponent<TransformComponent>())
+			if (entity->hasComponent<InputComponent>() && entity->hasComponent<TransformComponent>() && entity->hasComponent<StateComponent>())
 			{
-				auto& input = entity->getComponent<InputComponent>();
-				auto& transform = entity->getComponent<TransformComponent>();
+				InputComponent& input = entity->getComponent<InputComponent>();
+				TransformComponent& transform = entity->getComponent<TransformComponent>();
+				StateComponent& state = entity->getComponent<StateComponent>();
 
 				input.up = Game::currentKeyStates[SDL_SCANCODE_W];
 				input.down = Game::currentKeyStates[SDL_SCANCODE_S];
@@ -28,30 +29,18 @@ public:
 				input.right = Game::currentKeyStates[SDL_SCANCODE_D];
 
 				if (input.up == input.down)
-				{
 					transform.velocity.y = 0;
-				}
 				else if (input.up)
-				{
 					transform.velocity.y = -1;
-				}
 				else if (input.down)
-				{
 					transform.velocity.y = 1;
-				}
 
 				if (input.left == input.right)
-				{
 					transform.velocity.x = 0;
-				}
 				else if (input.left)
-				{
 					transform.velocity.x = -1;
-				}
 				else if (input.right)
-				{
 					transform.velocity.x = 1;
-				}
 
 				if (transform.velocity.x != 0 && transform.velocity.y != 0)
 				{
@@ -60,6 +49,12 @@ public:
 					transform.velocity.y /= length;
 				}
 
+				if (transform.velocity.x != 0 || transform.velocity.y != 0)
+					state.setState(State::WALK);
+				else
+					state.setState(State::IDLE);
+
+				transform.previousPosition = transform.position;
 				transform.position.x += transform.velocity.x * transform.speed;
 				transform.position.y += transform.velocity.y * transform.speed;
 			}

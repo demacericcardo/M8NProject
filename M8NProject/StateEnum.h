@@ -2,5 +2,5 @@
 
 enum class State {
 	IDLE,
-	RUNNING
+	WALK
 };

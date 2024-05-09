@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
 
 	game = new Game();
 
-	game->init("Game Window", 800, 640, false);
+	game->init("Game Window", false);
 
 	while (game->running())
 	{

@@ -30,5 +30,13 @@ public:
 
 	Vector2D& zero();
 
+	Vector2D lerp(const Vector2D& target, float factor) const
+	{
+		Vector2D result;
+		result.x = x + factor * (target.x - x);
+		result.y = y + factor * (target.y - y);
+		return result;
+	}
+
 	friend std::ostream& operator<<(std::ostream& stream, const Vector2D& vec);
 };

@@ -3,6 +3,7 @@
 #include "Managers.h"
 #include "Entities.h"
 #include "Systems.h"
+#include "Camera.h"
 
 Manager manager;
 
@@ -14,7 +15,7 @@ const Uint8* Game::currentKeyStates = nullptr;
 Game::Game() : isRunning(false), window(nullptr) {}
 Game::~Game() {}
 
-void Game::init(const char* title, int width, int height, bool fullscreen)
+void Game::init(const char* title, bool fullscreen)
 {
 	int flags = 0;
 	if (fullscreen)
@@ -22,7 +23,7 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
 	{
-		window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags);
+		window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, flags);
 		renderer = SDL_CreateRenderer(window, -1, 0);
 
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
@@ -34,17 +35,40 @@ void Game::init(const char* title, int width, int height, bool fullscreen)
 		isRunning = false;
 	}
 
-	if (!AssetManager::getInstance().addTexture("playerTexture", "assets/pgUp.png"))
+	loadTextures();
+
+	RenderSystem& renderSystem = manager.addSystem<RenderSystem>(manager);
+	InputSystem& inputSystem = manager.addSystem<InputSystem>(manager);
+	CollisionSystem& collisionSystem = manager.addSystem<CollisionSystem>(manager);
+
+	Rock& rock = manager.addEntity<Rock>(manager);
+	Player& player = manager.addEntity<Player>(manager);
+
+	Camera::getInstance().setTarget(player.getComponent<TransformComponent>());
+}
+
+void Game::loadTextures()
+{
+	if (!AssetManager::getInstance().addTexture("playerTexture", "assets/character.png"))
 	{
 		std::cout << "Failed to add texture to AssetManager.\n";
 		isRunning = false;
 		return;
 	}
 
-	RenderSystem& renderSystem = manager.addSystem<RenderSystem>(manager);
-	InputSystem& inputSystem = manager.addSystem<InputSystem>(manager);
+	if (!AssetManager::getInstance().addTexture("trigger", "assets/trigger.png"))
+	{
+		std::cout << "Failed to add texture to AssetManager.\n";
+		isRunning = false;
+		return;
+	}
 
-	Player& player = manager.addEntity<Player>(manager);
+	if (!AssetManager::getInstance().addTexture("rockTexture", "assets/dirt.png"))
+	{
+		std::cout << "Failed to add texture to AssetManager.\n";
+		isRunning = false;
+		return;
+	}
 }
 
 void Game::handleEvents()
@@ -67,6 +91,7 @@ void Game::handleEvents()
 void Game::update() {
 	manager.refresh();
 	manager.update();
+	Camera::getInstance().update();
 }
 
 void Game::clean()

@@ -7,6 +7,7 @@
 #include <memory>
 
 #include "Component.h"
+#include "Components.h"
 
 class Manager;
 class Component;
@@ -43,6 +44,7 @@ private:
 
 public:
 	Entity(Manager& mManager) : manager(mManager) {}
+	virtual ~Entity() {}
 
 	bool isActive() const { return active; }
 	void destroy() { active = false; }
@@ -71,5 +73,15 @@ public:
 	{
 		auto componentRawPointer(componentArray[getComponentTypeID<T>()]);
 		return *static_cast<T*>(componentRawPointer);
+	}
+
+	ColliderComponent& getColliderComponent(const std::string& tag)
+	{
+		for (auto& component : components)
+		{
+			ColliderComponent* collider = dynamic_cast<ColliderComponent*>(component.get());
+			if (collider && collider->tag == tag)
+				return *collider;
+		}
 	}
 };
