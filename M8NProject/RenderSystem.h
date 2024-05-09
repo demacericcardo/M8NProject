@@ -26,13 +26,13 @@ public:
 				const TransformComponent& transform = entity->getComponent<TransformComponent>();
 
 				srcRect.x = srcRect.y = 0;
-				srcRect.w = transform.width;
-				srcRect.h = transform.height;
+				srcRect.w = render.width;
+				srcRect.h = render.height;
 
 				destRect.x = static_cast<int>(transform.position.x);
 				destRect.y = static_cast<int>(transform.position.y);
-				destRect.w = transform.width * transform.scale;
-				destRect.h = transform.height * transform.scale;
+				destRect.w = render.width * render.scale;
+				destRect.h = render.height * render.scale;
 
 				SDL_RenderCopy(Game::renderer, AssetManager::getInstance().getTexture(render.textureID), &srcRect, &destRect);
 			}

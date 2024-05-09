@@ -141,6 +141,7 @@
     <ClInclude Include="ECS.h" />
     <ClInclude Include="Entities.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Enums.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="InputComponent.h" />
     <ClInclude Include="AssetManager.h" />
@@ -150,6 +151,8 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="RenderSystem.h" />
+    <ClInclude Include="StateComponent.h" />
+    <ClInclude Include="StateEnum.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="Systems.h" />
     <ClInclude Include="Vector2D.h" />
