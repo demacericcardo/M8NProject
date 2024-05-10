@@ -9,6 +9,7 @@ public:
 	bool down = false;
 	bool left = false;
 	bool right = false;
+	bool interact = false;
 
 	InputComponent() {}
 	~InputComponent() {}
@@ -19,5 +20,6 @@ public:
 		down = false;
 		left = false;
 		right = false;
+		interact = false;
 	}
 };

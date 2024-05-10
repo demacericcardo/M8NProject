@@ -69,6 +69,13 @@ void Game::loadTextures()
 		isRunning = false;
 		return;
 	}
+
+	if (!AssetManager::getInstance().addTexture("mineralInterface", "assets/water.png"))
+	{
+		std::cout << "Failed to add texture to AssetManager.\n";
+		isRunning = false;
+		return;
+	}
 }
 
 void Game::handleEvents()

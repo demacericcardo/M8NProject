@@ -6,6 +6,8 @@
 class Player : public Entity
 {
 public:
+	int minerals = 0;
+
 	TransformComponent* transform;
 	RenderComponent* sprite;
 	InputComponent* input;
@@ -13,7 +15,8 @@ public:
 	AnimationComponent* animation;
 	ColliderComponent* collider;
 
-	bool showInteraction = false;
+	bool hasInteracted = false;
+	Entity* interactableEntity = nullptr;
 
 	Player(Manager& manager) : Entity(manager)
 	{

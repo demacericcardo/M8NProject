@@ -22,7 +22,7 @@ public:
 	{
 		for (auto& s : systems)
 		{
-			s->update(entities);
+			s->update(entities); 
 		}
 	}
 
@@ -34,6 +34,13 @@ public:
 				return !mEntity->isActive();
 			}),
 			std::end(entities));
+
+		systems.erase(std::remove_if(std::begin(systems), std::end(systems),
+			[](const std::unique_ptr<System>& mSystem)
+			{
+				return !mSystem->isActive();
+			}),
+			std::end(systems));
 	}
 
 	template <typename T, typename... TArgs>

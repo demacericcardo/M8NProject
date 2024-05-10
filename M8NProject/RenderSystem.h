@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL.h>
+#include <SDL_ttf.h>
 
 #include "ECS.h"
 #include "Game.h"
@@ -11,7 +12,20 @@
 class RenderSystem : public System
 {
 public:
-	RenderSystem(Manager& manager) : System(manager) {}
+	TTF_Font* font = nullptr;
+
+	RenderSystem(Manager& manager) : System(manager)
+	{
+		if (TTF_Init() == -1) {
+			printf("TTF_Init: %s\n", TTF_GetError());
+			exit(2);
+		}
+
+		font = TTF_OpenFont("assets/default.ttf", 24);
+		if (font == NULL) {
+			printf("TTF_OpenFont: %s\n", TTF_GetError());
+		}
+	}
 	~RenderSystem() {}
 
 	void update(std::vector<std::unique_ptr<Entity>>& entities) override
@@ -61,11 +75,22 @@ public:
 
 				if (playerEntity)
 				{
-					if (playerEntity->showInteraction)
+					if (playerEntity->interactableEntity)
 					{
-						SDL_Rect destRect = { render.destRect.x, render.destRect.y - 32, 32, 32 };
+						SDL_Rect destRect = { render.destRect.x, render.destRect.y - 48, 32, 32 };
 						SDL_RenderCopy(Game::renderer, AssetManager::getInstance().getTexture("trigger"), nullptr, &destRect);
 					}
+
+					SDL_Color color = { 0, 0, 0 };
+					std::string stringMineralValue = std::to_string(playerEntity->minerals);
+					stringMineralValue = "Minerals: " + stringMineralValue;
+
+					SDL_Surface* surface = TTF_RenderText_Solid(font, stringMineralValue.c_str(), color);
+					SDL_Texture* texture = SDL_CreateTextureFromSurface(Game::renderer, surface);
+					
+					SDL_Rect textRect = { Game::SCREEN_WIDTH - surface->w - 10, 30, surface->w, surface->h };
+
+					SDL_RenderCopy(Game::renderer, texture, NULL, &textRect);
 				}
 
 				SDL_RenderCopy(Game::renderer, AssetManager::getInstance().getTexture(render.textureID), &render.srcRect, &render.destRect);

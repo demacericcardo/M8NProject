@@ -27,6 +27,7 @@ public:
 				input.down = Game::currentKeyStates[SDL_SCANCODE_S];
 				input.left = Game::currentKeyStates[SDL_SCANCODE_A];
 				input.right = Game::currentKeyStates[SDL_SCANCODE_D];
+				input.interact = Game::currentKeyStates[SDL_SCANCODE_E];
 
 				if (input.up == input.down)
 					transform.velocity.y = 0;
@@ -53,6 +54,28 @@ public:
 					state.setState(State::WALK);
 				else
 					state.setState(State::IDLE);
+
+				if (input.interact)
+				{
+					Player* playerEntity = dynamic_cast<Player*>(entity.get());
+
+					if (playerEntity && playerEntity->interactableEntity && !playerEntity->hasInteracted)
+					{
+						playerEntity->interactableEntity->destroy();
+						playerEntity->minerals++;
+						playerEntity->hasInteracted = true;
+					}
+				}
+				else
+				{
+					Player* playerEntity = dynamic_cast<Player*>(entity.get());
+					if (playerEntity)
+					{
+						playerEntity->hasInteracted = false;
+						if (playerEntity->interactableEntity)
+							playerEntity->interactableEntity = nullptr;
+					}
+				}
 
 				transform.previousPosition = transform.position;
 				transform.position.x += transform.velocity.x * transform.speed;

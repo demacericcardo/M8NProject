@@ -35,6 +35,7 @@ public:
 					{
 						ColliderComponent& colliderBlock = entity2->getColliderComponent("notwalkable");
 						ColliderComponent& colliderInteractable = entity2->getColliderComponent("interactable");
+
 						auto& transform2 = entity2->getComponent<TransformComponent>();
 
 						if (playerCollider.tag == "player")
@@ -45,9 +46,9 @@ public:
 								playerEntity->transform->position = playerEntity->transform->previousPosition;
 
 							if (playerCollider.collidesWith(colliderInteractable))
-								playerEntity->showInteraction = true;
+								playerEntity->interactableEntity = entity2.get();
 							else
-								playerEntity->showInteraction = false;
+								playerEntity->interactableEntity = nullptr;
 						}
 					}
 				}
