@@ -7,6 +7,7 @@ class Rock : public Entity
 {
 private:
 	int interactableRange = 64;
+	int minerals = 10;
 public:
 	Rock(Manager& manager) : Entity(manager)
 	{
@@ -23,6 +24,13 @@ public:
 			);
 	}
 	~Rock() {}
+
+	void takeMineral() {
+		minerals--;
+		if (minerals <= 0) {
+			destroy();
+		}
+	}
 
 	TransformComponent* transform;
 	RenderComponent* sprite;

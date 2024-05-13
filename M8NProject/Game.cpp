@@ -103,8 +103,29 @@ void Game::update() {
 
 void Game::clean()
 {
-	SDL_DestroyWindow(window);
-	SDL_DestroyRenderer(renderer);
+	if (renderer != nullptr) {
+		SDL_DestroyRenderer(renderer);
+		renderer = nullptr;
+		if (strlen(SDL_GetError()) > 0) {
+			std::cout << "SDL_DestroyRenderer Error: " << SDL_GetError() << std::endl;
+			SDL_ClearError();
+		}
+	}
+
+	if (window != nullptr) {
+		SDL_DestroyWindow(window);
+		window = nullptr;
+		if (strlen(SDL_GetError()) > 0) {
+			std::cout << "SDL_DestroyWindow Error: " << SDL_GetError() << std::endl;
+			SDL_ClearError();
+		}
+	}
+
 	SDL_Quit();
+	if (strlen(SDL_GetError()) > 0) {
+		std::cout << "SDL_Quit Error: " << SDL_GetError() << std::endl;
+		SDL_ClearError();
+	}
+
 	std::cout << "Game Cleaned..." << std::endl;
 }

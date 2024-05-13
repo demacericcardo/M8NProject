@@ -61,7 +61,8 @@ public:
 
 					if (playerEntity && playerEntity->interactableEntity && !playerEntity->hasInteracted)
 					{
-						playerEntity->interactableEntity->destroy();
+						Rock* rockEntity = dynamic_cast<Rock*>(playerEntity->interactableEntity);
+						rockEntity->takeMineral();
 						playerEntity->minerals++;
 						playerEntity->hasInteracted = true;
 					}

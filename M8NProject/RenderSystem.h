@@ -87,10 +87,13 @@ public:
 
 					SDL_Surface* surface = TTF_RenderText_Solid(font, stringMineralValue.c_str(), color);
 					SDL_Texture* texture = SDL_CreateTextureFromSurface(Game::renderer, surface);
-					
+
 					SDL_Rect textRect = { Game::SCREEN_WIDTH - surface->w - 10, 30, surface->w, surface->h };
 
 					SDL_RenderCopy(Game::renderer, texture, NULL, &textRect);
+
+					SDL_FreeSurface(surface);
+					SDL_DestroyTexture(texture);
 				}
 
 				SDL_RenderCopy(Game::renderer, AssetManager::getInstance().getTexture(render.textureID), &render.srcRect, &render.destRect);
