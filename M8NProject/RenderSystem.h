@@ -32,6 +32,14 @@ public:
 	{
 		SDL_RenderClear(Game::renderer);
 		Vector2D cameraPos = Camera::getInstance().getPosition();
+		
+		std::sort(entities.begin(), entities.end(), [](const std::unique_ptr<Entity>& a, const std::unique_ptr<Entity>& b) {
+			if (a->hasComponent<RenderComponent>() && b->hasComponent<RenderComponent>()) {
+				return a->getComponent<RenderComponent>().zIndex < b->getComponent<RenderComponent>().zIndex;
+			}
+			return false;
+			});
+
 		for (auto& entity : entities)
 		{
 			if (entity->hasComponent<RenderComponent>() && entity->hasComponent<TransformComponent>())
@@ -96,7 +104,26 @@ public:
 					SDL_DestroyTexture(texture);
 				}
 
-				SDL_RenderCopy(Game::renderer, AssetManager::getInstance().getTexture(render.textureID), &render.srcRect, &render.destRect);
+
+				Bot* botEntity = dynamic_cast<Bot*>(entity.get());
+
+				if (botEntity)
+				{
+					TransformComponent& transform1 = botEntity->getComponent<TransformComponent>();
+					TransformComponent* transform2 = botEntity->currentTarget;
+
+					// Subtract the camera's position from the entity's position
+					int x1 = static_cast<int>(transform1.position.x + 16 - cameraPos.x);
+					int y1 = static_cast<int>(transform1.position.y + 16 - cameraPos.y);
+					int x2 = static_cast<int>(transform2->position.x + 16 - cameraPos.x);
+					int y2 = static_cast<int>(transform2->position.y + 16 - cameraPos.y);
+
+					SDL_SetRenderDrawColor(Game::renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+					SDL_RenderDrawLine(Game::renderer, x1, y1, x2, y2);
+					SDL_SetRenderDrawColor(Game::renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+				}
+
+				SDL_RenderCopy(Game::renderer, AssetManager::getInstance().getTexture(render.getTextureID()), &render.srcRect, &render.destRect);
 			}
 		}
 		SDL_RenderPresent(Game::renderer);

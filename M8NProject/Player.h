@@ -21,7 +21,7 @@ public:
 	Player(Manager& manager) : Entity(manager)
 	{
 		transform = &addComponent<TransformComponent>(200, 200);
-		sprite = &addComponent<RenderComponent>("playerTexture");
+		sprite = &addComponent<RenderComponent>("playerTexture", 100);
 		input = &addComponent<InputComponent>();
 		state = &addComponent<StateComponent>(State::IDLE);
 		animation = &addComponent<AnimationComponent>(0, 2, 100);

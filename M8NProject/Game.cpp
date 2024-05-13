@@ -37,14 +37,14 @@ void Game::init(const char* title, bool fullscreen)
 
 	loadTextures();
 
+	Rock& rock = manager.addEntity<Rock>(manager);
+	Player& player = manager.addEntity<Player>(manager);
+	Bot& bot = manager.addEntity<Bot>(manager, player.transform);
+
 	RenderSystem& renderSystem = manager.addSystem<RenderSystem>(manager);
 	InputSystem& inputSystem = manager.addSystem<InputSystem>(manager);
 	CollisionSystem& collisionSystem = manager.addSystem<CollisionSystem>(manager);
 	AISystem& aiSystem = manager.addSystem<AISystem>(manager);
-
-	Rock& rock = manager.addEntity<Rock>(manager);
-	Player& player = manager.addEntity<Player>(manager);
-	Bot& bot = manager.addEntity<Bot>(manager, player.transform);
 
 	Camera::getInstance().setTarget(player.getComponent<TransformComponent>());
 }
