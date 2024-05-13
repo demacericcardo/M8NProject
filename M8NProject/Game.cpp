@@ -40,9 +40,11 @@ void Game::init(const char* title, bool fullscreen)
 	RenderSystem& renderSystem = manager.addSystem<RenderSystem>(manager);
 	InputSystem& inputSystem = manager.addSystem<InputSystem>(manager);
 	CollisionSystem& collisionSystem = manager.addSystem<CollisionSystem>(manager);
+	AISystem& aiSystem = manager.addSystem<AISystem>(manager);
 
 	Rock& rock = manager.addEntity<Rock>(manager);
 	Player& player = manager.addEntity<Player>(manager);
+	Bot& bot = manager.addEntity<Bot>(manager, player.transform);
 
 	Camera::getInstance().setTarget(player.getComponent<TransformComponent>());
 }
@@ -105,7 +107,6 @@ void Game::clean()
 {
 	if (renderer != nullptr) {
 		SDL_DestroyRenderer(renderer);
-		renderer = nullptr;
 		if (strlen(SDL_GetError()) > 0) {
 			std::cout << "SDL_DestroyRenderer Error: " << SDL_GetError() << std::endl;
 			SDL_ClearError();
@@ -114,7 +115,6 @@ void Game::clean()
 
 	if (window != nullptr) {
 		SDL_DestroyWindow(window);
-		window = nullptr;
 		if (strlen(SDL_GetError()) > 0) {
 			std::cout << "SDL_DestroyWindow Error: " << SDL_GetError() << std::endl;
 			SDL_ClearError();

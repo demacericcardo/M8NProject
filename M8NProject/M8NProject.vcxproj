@@ -136,7 +136,9 @@
     <None Include="TransformComponent.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AISystem.h" />
     <ClInclude Include="AnimationComponent.h" />
+    <ClInclude Include="Bot.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ColliderComponent.h" />
     <ClInclude Include="CollisionSystem.h" />

@@ -7,7 +7,8 @@
 class RenderComponent : public Component
 {
 public:
-	SDL_Rect srcRect, destRect;
+	SDL_Rect srcRect = { 0, 0, 32, 32 };
+	SDL_Rect destRect = { 0, 0, 32, 32 };
 	std::string textureID;
 
 	int height = 32;
