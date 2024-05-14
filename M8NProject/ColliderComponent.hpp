@@ -2,7 +2,7 @@
 
 #include <SDL.h>
 
-#include "ECS.h"
+#include "ECS.hpp"
 
 class ColliderComponent : public Component
 {

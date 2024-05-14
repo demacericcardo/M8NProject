@@ -6,8 +6,8 @@
 #include <array>
 #include <memory>
 
-#include "Component.h"
-#include "Components.h"
+#include "Component.hpp"
+#include "Components.hpp"
 
 class Manager;
 class Component;
@@ -75,6 +75,17 @@ public:
 		return *static_cast<T*>(componentRawPointer);
 	}
 
+	bool hasColliderComponent(const std::string& tag)
+	{
+		for (auto& component : components)
+		{
+			ColliderComponent* collider = dynamic_cast<ColliderComponent*>(component.get());
+			if (collider && collider->tag == tag)
+				return true;
+		}
+		return false;
+	}
+
 	ColliderComponent& getColliderComponent(const std::string& tag)
 	{
 		for (auto& component : components)
@@ -83,5 +94,6 @@ public:
 			if (collider && collider->tag == tag)
 				return *collider;
 		}
+		throw std::runtime_error("No ColliderComponent with tag " + tag + " found.");
 	}
 };

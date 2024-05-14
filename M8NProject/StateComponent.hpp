@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ECS.h"
-#include "Enums.h"
+#include "ECS.hpp"
+#include "Enums.hpp"
 
 class StateComponent : public Component
 {

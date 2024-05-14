@@ -2,10 +2,10 @@
 
 #include <SDL.h>
 
-#include "ECS.h"
-#include "Game.h"
-#include "Components.h"
-#include "Managers.h"
+#include "ECS.hpp"
+#include "Game.hpp"
+#include "Components.hpp"
+#include "Managers.hpp"
 
 class InputSystem : public System
 {
@@ -35,7 +35,7 @@ public:
 				{
 					if (!input.mousePosClicked)
 					{
-						input.mousePosClicked = std::make_unique<Vector2D>(Game::mouseXPos, Game::mouseYPos);
+						input.mousePosClicked = std::make_unique<Vector2D>(static_cast<float>(Game::mouseXPos), static_cast<float>(Game::mouseYPos));
 					}
 				}
 				else
@@ -44,18 +44,18 @@ public:
 				}
 
 				if (input.up == input.down)
-					transform.velocity.y = 0;
+					transform.velocity.y = 0.0f;
 				else if (input.up)
-					transform.velocity.y = -1;
+					transform.velocity.y = -1.0f;
 				else if (input.down)
-					transform.velocity.y = 1;
+					transform.velocity.y = 1.0f;
 
 				if (input.left == input.right)
-					transform.velocity.x = 0;
+					transform.velocity.x = 0.0f;
 				else if (input.left)
-					transform.velocity.x = -1;
+					transform.velocity.x = -1.0f;
 				else if (input.right)
-					transform.velocity.x = 1;
+					transform.velocity.x = 1.0f;
 
 				if (transform.velocity.x != 0 && transform.velocity.y != 0)
 				{
@@ -93,8 +93,8 @@ public:
 				}
 
 				transform.previousPosition = transform.position;
-				transform.position.x += transform.velocity.x * transform.speed;
-				transform.position.y += transform.velocity.y * transform.speed;
+				transform.position.x += transform.velocity.x * static_cast<float>(transform.speed);
+				transform.position.y += transform.velocity.y * static_cast<float>(transform.speed);
 			}
 		}
 	}

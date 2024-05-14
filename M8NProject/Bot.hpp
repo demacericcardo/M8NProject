@@ -1,8 +1,8 @@
 #pragma once
 
 
-#include "Entity.h"
-#include "Components.h"
+#include "Entity.hpp"
+#include "Components.hpp"
 
 class Bot : public Entity
 {
@@ -21,7 +21,7 @@ public:
 	Bot(Manager& manager, TransformComponent* target) : Entity(manager)
 	{
 		currentTarget = target;
-		transform = &addComponent<TransformComponent>(200, 200);
+		transform = &addComponent<TransformComponent>(200.0f, 200.0f);
 		sprite = &addComponent<RenderComponent>("playerTexture");
 		state = &addComponent<StateComponent>(State::IDLE);
 		animation = &addComponent<AnimationComponent>(0, 2, 100);

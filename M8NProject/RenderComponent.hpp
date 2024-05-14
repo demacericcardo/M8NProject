@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "ECS.h"
+#include "ECS.hpp"
 
 class RenderComponent : public Component
 {

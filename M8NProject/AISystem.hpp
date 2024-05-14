@@ -2,11 +2,11 @@
 
 #include <SDL.h>
 
-#include "ECS.h"
-#include "Game.h"
-#include "Components.h"
-#include "Managers.h"
-#include "Entities.h"
+#include "ECS.hpp"
+#include "Game.hpp"
+#include "Components.hpp"
+#include "Managers.hpp"
+#include "Entities.hpp"
 
 class AISystem : public System
 {
@@ -30,9 +30,9 @@ public:
 
 				if (playerEntity)
 				{
-					playerEntity->input->mousePosClicked
+					/*playerEntity->input->mousePosClicked
 					Game::mouseXPos;
-					Game::mouseYPos;
+					Game::mouseYPos;*/
 				}
 			}
 		}

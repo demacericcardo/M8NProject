@@ -3,11 +3,11 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 
-#include "ECS.h"
-#include "Game.h"
-#include "Components.h"
-#include "Managers.h"
-#include "Camera.h"
+#include "ECS.hpp"
+#include "Game.hpp"
+#include "Components.hpp"
+#include "Managers.hpp"
+#include "Camera.hpp"
 
 class RenderSystem : public System
 {
@@ -103,35 +103,16 @@ public:
 					SDL_DestroyTexture(texture);
 
 					if (playerEntity->input->mousePosClicked) {
-						SDL_Rect rect;
-						rect.x = playerEntity->input->mousePosClicked->x;
-						rect.y = playerEntity->input->mousePosClicked->y;
-						rect.w = Game::mouseXPos - playerEntity->input->mousePosClicked->x;
-						rect.h = Game::mouseYPos - playerEntity->input->mousePosClicked->y;
+						SDL_Rect rect{};
+						rect.x = static_cast<int>(playerEntity->input->mousePosClicked->x);
+						rect.y = static_cast<int>(playerEntity->input->mousePosClicked->y);
+						rect.w = Game::mouseXPos - static_cast<int>(playerEntity->input->mousePosClicked->x);
+						rect.h = Game::mouseYPos - static_cast<int>(playerEntity->input->mousePosClicked->y);
 
 						SDL_SetRenderDrawColor(Game::renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
 						SDL_RenderDrawRect(Game::renderer, &rect);
 						SDL_SetRenderDrawColor(Game::renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
 					}
-				}
-
-
-				Bot* botEntity = dynamic_cast<Bot*>(entity.get());
-
-				if (botEntity)
-				{
-					TransformComponent& transform1 = botEntity->getComponent<TransformComponent>();
-					TransformComponent* transform2 = botEntity->currentTarget;
-
-					// Subtract the camera's position from the entity's position
-					int x1 = static_cast<int>(transform1.position.x + 16 - cameraPos.x);
-					int y1 = static_cast<int>(transform1.position.y + 16 - cameraPos.y);
-					int x2 = static_cast<int>(transform2->position.x + 16 - cameraPos.x);
-					int y2 = static_cast<int>(transform2->position.y + 16 - cameraPos.y);
-
-					SDL_SetRenderDrawColor(Game::renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-					SDL_RenderDrawLine(Game::renderer, x1, y1, x2, y2);
-					SDL_SetRenderDrawColor(Game::renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
 				}
 
 				SDL_RenderCopy(Game::renderer, AssetManager::getInstance().getTexture(render.getTextureID()), &render.srcRect, &render.destRect);

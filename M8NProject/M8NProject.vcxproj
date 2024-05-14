@@ -127,42 +127,43 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="TransformComponent.h" />
+    <None Include="TransformComponent.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AISystem.h" />
-    <ClInclude Include="AnimationComponent.h" />
-    <ClInclude Include="Bot.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="ColliderComponent.h" />
-    <ClInclude Include="CollisionSystem.h" />
-    <ClInclude Include="Component.h" />
-    <ClInclude Include="Components.h" />
-    <ClInclude Include="ECS.h" />
-    <ClInclude Include="Entities.h" />
-    <ClInclude Include="Entity.h" />
-    <ClInclude Include="Enums.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="InputComponent.h" />
-    <ClInclude Include="AssetManager.h" />
-    <ClInclude Include="InputSystem.h" />
-    <ClInclude Include="Manager.h" />
-    <ClInclude Include="Managers.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="RenderComponent.h" />
-    <ClInclude Include="RenderSystem.h" />
-    <ClInclude Include="Rock.h" />
-    <ClInclude Include="StateComponent.h" />
-    <ClInclude Include="StateEnum.h" />
-    <ClInclude Include="System.h" />
-    <ClInclude Include="Systems.h" />
-    <ClInclude Include="Vector2D.h" />
+    <ClInclude Include="AISystem.hpp" />
+    <ClInclude Include="AnimationComponent.hpp" />
+    <ClInclude Include="Bot.hpp" />
+    <ClInclude Include="Camera.hpp" />
+    <ClInclude Include="ColliderComponent.hpp" />
+    <ClInclude Include="CollisionSystem.hpp" />
+    <ClInclude Include="Component.hpp" />
+    <ClInclude Include="Components.hpp" />
+    <ClInclude Include="ECS.hpp" />
+    <ClInclude Include="Entities.hpp" />
+    <ClInclude Include="Entity.hpp" />
+    <ClInclude Include="Enums.hpp" />
+    <ClInclude Include="Game.hpp" />
+    <ClInclude Include="InputComponent.hpp" />
+    <ClInclude Include="AssetManager.hpp" />
+    <ClInclude Include="InputSystem.hpp" />
+    <ClInclude Include="Manager.hpp" />
+    <ClInclude Include="Managers.hpp" />
+    <ClInclude Include="Player.hpp" />
+    <ClInclude Include="RenderComponent.hpp" />
+    <ClInclude Include="RenderSystem.hpp" />
+    <ClInclude Include="Rock.hpp" />
+    <ClInclude Include="StateComponent.hpp" />
+    <ClInclude Include="StateEnum.hpp" />
+    <ClInclude Include="System.hpp" />
+    <ClInclude Include="Systems.hpp" />
+    <ClInclude Include="Vector2D.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

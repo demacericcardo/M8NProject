@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Entity.h"
-#include "Components.h"
+#include "Entity.hpp"
+#include "Components.hpp"
 
 class Player : public Entity
 {
@@ -20,12 +20,12 @@ public:
 
 	Player(Manager& manager) : Entity(manager)
 	{
-		transform = &addComponent<TransformComponent>(200, 200);
+		transform = &addComponent<TransformComponent>(200.0f, 200.0f);
 		sprite = &addComponent<RenderComponent>("playerTexture", 100);
 		input = &addComponent<InputComponent>();
 		state = &addComponent<StateComponent>(State::IDLE);
 		animation = &addComponent<AnimationComponent>(0, 2, 100);
-		collider = &addComponent<ColliderComponent>(transform->position.x, transform->position.y, sprite->width, sprite->height, "player");
+		collider = &addComponent<ColliderComponent>(static_cast<int>(transform->position.x), static_cast<int>(transform->position.y), sprite->width, sprite->height, "player");
 	}
 	~Player() {}
 };

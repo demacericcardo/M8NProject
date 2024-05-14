@@ -1,9 +1,9 @@
-#include "Game.h"
-#include "ECS.h"
-#include "Managers.h"
-#include "Entities.h"
-#include "Systems.h"
-#include "Camera.h"
+#include "Game.hpp"
+#include "ECS.hpp"
+#include "Managers.hpp"
+#include "Entities.hpp"
+#include "Systems.hpp"
+#include "Camera.hpp"
 
 Manager manager;
 

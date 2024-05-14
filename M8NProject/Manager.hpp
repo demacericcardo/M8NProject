@@ -5,8 +5,8 @@
 #include <algorithm>
 #include <memory>
 
-#include "Entity.h"
-#include "System.h"
+#include "Entity.hpp"
+#include "System.hpp"
 
 class Entity;
 class System;

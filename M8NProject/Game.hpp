@@ -9,6 +9,9 @@ class ColliderComponent;
 
 class Game
 {
+private:
+	bool isRunning;
+	SDL_Window* window;
 public:
 	Game();
 	~Game();
@@ -32,8 +35,4 @@ public:
 
 	static SDL_Renderer* renderer;
 	static SDL_Event event;
-
-private:
-	bool isRunning;
-	SDL_Window* window;
 };

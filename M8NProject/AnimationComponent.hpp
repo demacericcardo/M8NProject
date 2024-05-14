@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ECS.h"
+#include "ECS.hpp"
 
 class AnimationComponent : public Component
 {

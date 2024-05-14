@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Entity.h"
-#include "Components.h"
+#include "Entity.hpp"
+#include "Components.hpp"
 
 class Rock : public Entity
 {
@@ -11,13 +11,13 @@ private:
 public:
 	Rock(Manager& manager) : Entity(manager)
 	{
-		transform = &addComponent<TransformComponent>(100, 100);
+		transform = &addComponent<TransformComponent>(100.0f, 100.0f);
 		sprite = &addComponent<RenderComponent>("rockTexture");
-		colliderBlock = &addComponent<ColliderComponent>(transform->position.x, transform->position.y, sprite->width, sprite->height, "notwalkable");
+		colliderBlock = &addComponent<ColliderComponent>(static_cast<int>(transform->position.x), static_cast<int>(transform->position.y), sprite->width, sprite->height, "notwalkable");
 		collider = &addComponent<ColliderComponent>
 			(
-				transform->position.x - interactableRange / static_cast<float>(2),
-				transform->position.y - interactableRange / static_cast<float>(2),
+				static_cast<int>(transform->position.x) - interactableRange / 2,
+				static_cast<int>(transform->position.y) - interactableRange / 2,
 				sprite->width + interactableRange,
 				sprite->height + interactableRange,
 				"interactable"
