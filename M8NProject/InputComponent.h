@@ -10,16 +10,10 @@ public:
 	bool left = false;
 	bool right = false;
 	bool interact = false;
+	bool mouseLeftClick = false;
+
+	std::unique_ptr<Vector2D> mousePosClicked;
 
 	InputComponent() {}
 	~InputComponent() {}
-
-	void reset()
-	{
-		up = false;
-		down = false;
-		left = false;
-		right = false;
-		interact = false;
-	}
 };

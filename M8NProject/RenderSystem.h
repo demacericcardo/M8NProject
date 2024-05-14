@@ -32,14 +32,13 @@ public:
 	{
 		SDL_RenderClear(Game::renderer);
 		Vector2D cameraPos = Camera::getInstance().getPosition();
-		
+
 		std::sort(entities.begin(), entities.end(), [](const std::unique_ptr<Entity>& a, const std::unique_ptr<Entity>& b) {
 			if (a->hasComponent<RenderComponent>() && b->hasComponent<RenderComponent>()) {
 				return a->getComponent<RenderComponent>().zIndex < b->getComponent<RenderComponent>().zIndex;
 			}
 			return false;
 			});
-
 		for (auto& entity : entities)
 		{
 			if (entity->hasComponent<RenderComponent>() && entity->hasComponent<TransformComponent>())
@@ -102,6 +101,18 @@ public:
 
 					SDL_FreeSurface(surface);
 					SDL_DestroyTexture(texture);
+
+					if (playerEntity->input->mousePosClicked) {
+						SDL_Rect rect;
+						rect.x = playerEntity->input->mousePosClicked->x;
+						rect.y = playerEntity->input->mousePosClicked->y;
+						rect.w = Game::mouseXPos - playerEntity->input->mousePosClicked->x;
+						rect.h = Game::mouseYPos - playerEntity->input->mousePosClicked->y;
+
+						SDL_SetRenderDrawColor(Game::renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+						SDL_RenderDrawRect(Game::renderer, &rect);
+						SDL_SetRenderDrawColor(Game::renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+					}
 				}
 
 

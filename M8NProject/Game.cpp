@@ -12,6 +12,10 @@ SDL_Event Game::event;
 
 const Uint8* Game::currentKeyStates = nullptr;
 
+Uint32 Game::mouseState = 0;
+int Game::mouseXPos = 0;
+int Game::mouseYPos = 0;
+
 Game::Game() : isRunning(false), window(nullptr) {}
 Game::~Game() {}
 
@@ -95,6 +99,8 @@ void Game::handleEvents()
 	}
 
 	currentKeyStates = SDL_GetKeyboardState(NULL);
+
+	Game::mouseState = SDL_GetMouseState(&Game::mouseXPos, &Game::mouseYPos);
 }
 
 void Game::update() {

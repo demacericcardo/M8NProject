@@ -7,8 +7,10 @@
 class Bot : public Entity
 {
 public:
-	float lerpSpeed = 0.025f;
+	float speed = 0.025f;
 	float stopDistance = 50.0f;
+
+	bool isSelected = false;
 
 	TransformComponent* currentTarget;
 	TransformComponent* transform;

@@ -29,6 +29,20 @@ public:
 				input.right = Game::currentKeyStates[SDL_SCANCODE_D];
 				input.interact = Game::currentKeyStates[SDL_SCANCODE_E];
 
+				input.mouseLeftClick = Game::mouseState & SDL_BUTTON(SDL_BUTTON_LEFT);
+
+				if (input.mouseLeftClick)
+				{
+					if (!input.mousePosClicked)
+					{
+						input.mousePosClicked = std::make_unique<Vector2D>(Game::mouseXPos, Game::mouseYPos);
+					}
+				}
+				else
+				{
+					input.mousePosClicked.reset();
+				}
+
 				if (input.up == input.down)
 					transform.velocity.y = 0;
 				else if (input.up)

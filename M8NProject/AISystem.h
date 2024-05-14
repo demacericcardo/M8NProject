@@ -20,23 +20,19 @@ public:
 		{
 			if (entity->hasComponent<TransformComponent>() && entity->hasComponent<StateComponent>())
 			{
-				Bot* currentEntity = dynamic_cast<Bot*>(entity.get());
+				Bot* botEntity = dynamic_cast<Bot*>(entity.get());
 
-				if (currentEntity)
+				if (botEntity)
 				{
-					InputComponent& input = entity->getComponent<InputComponent>();
-					TransformComponent& transform = entity->getComponent<TransformComponent>();
-					StateComponent& state = entity->getComponent<StateComponent>();
+				}
 
-					float dx = currentEntity->currentTarget->position.x - transform.position.x;
-					float dy = currentEntity->currentTarget->position.y - transform.position.y;
-					float distance = sqrt(dx * dx + dy * dy);
+				Player* playerEntity = dynamic_cast<Player*>(entity.get());
 
-					if (distance > currentEntity->stopDistance)
-					{
-						transform.position.x = transform.position.x + dx * currentEntity->lerpSpeed;
-						transform.position.y = transform.position.y + dy * currentEntity->lerpSpeed;
-					}
+				if (playerEntity)
+				{
+					playerEntity->input->mousePosClicked
+					Game::mouseXPos;
+					Game::mouseYPos;
 				}
 			}
 		}

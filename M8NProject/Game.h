@@ -21,10 +21,14 @@ public:
 
 	bool running() const { return isRunning; }
 
-	static const int SCREEN_WIDTH = 800;
-	static const int SCREEN_HEIGHT = 640;
+	static const int SCREEN_WIDTH = 1600;
+	static const int SCREEN_HEIGHT = 1280;
 
 	static const Uint8* currentKeyStates;
+
+	static int mouseXPos;
+	static int mouseYPos;
+	static Uint32 mouseState;
 
 	static SDL_Renderer* renderer;
 	static SDL_Event event;
