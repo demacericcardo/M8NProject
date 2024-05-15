@@ -7,19 +7,20 @@ void InputSystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 {
 	Input& input = Input::getInstance();
 
-	input.up = Game::currentKeyStates[SDL_SCANCODE_W];
-	input.down = Game::currentKeyStates[SDL_SCANCODE_S];
-	input.left = Game::currentKeyStates[SDL_SCANCODE_A];
-	input.right = Game::currentKeyStates[SDL_SCANCODE_D];
-	input.interact = Game::currentKeyStates[SDL_SCANCODE_E];
+	input.up = input.currentKeyStates[SDL_SCANCODE_W];
+	input.down = input.currentKeyStates[SDL_SCANCODE_S];
+	input.left = input.currentKeyStates[SDL_SCANCODE_A];
+	input.right = input.currentKeyStates[SDL_SCANCODE_D];
+	input.interact = input.currentKeyStates[SDL_SCANCODE_E];
 
-	input.mouseLeftClick = Game::mouseState & SDL_BUTTON(SDL_BUTTON_LEFT);
+	input.mouseLeftClick = input.mouseState & SDL_BUTTON(SDL_BUTTON_LEFT);
+	input.mouseRightClick = input.mouseState & SDL_BUTTON(SDL_BUTTON_RIGHT);
 
 	if (input.mouseLeftClick)
 	{
 		if (!input.mousePosClicked)
 		{
-			input.mousePosClicked = std::make_unique<Vector2D>(static_cast<float>(Game::mouseXPos), static_cast<float>(Game::mouseYPos));
+			input.mousePosClicked = std::make_unique<Vector2D>(static_cast<float>(input.mouseXPos), static_cast<float>(input.mouseYPos));
 		}
 	}
 	else

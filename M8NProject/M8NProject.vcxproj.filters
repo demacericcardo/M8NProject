@@ -69,6 +69,18 @@
     <ClCompile Include="RenderSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
+    <ClCompile Include="AssetManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerInteractionSystem.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerMovementSystem.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitsMovementSystem.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -94,9 +106,6 @@
     </ClInclude>
     <ClInclude Include="Vector2D.hpp">
       <Filter>Header Files\Generics</Filter>
-    </ClInclude>
-    <ClInclude Include="InputComponent.hpp">
-      <Filter>Header Files\ECS\Components</Filter>
     </ClInclude>
     <ClInclude Include="RenderComponent.hpp">
       <Filter>Header Files\ECS\Components</Filter>
@@ -134,9 +143,6 @@
     <ClInclude Include="Enums.hpp">
       <Filter>Header Files\Enums</Filter>
     </ClInclude>
-    <ClInclude Include="StateEnum.hpp">
-      <Filter>Header Files\Enums</Filter>
-    </ClInclude>
     <ClInclude Include="AnimationComponent.hpp">
       <Filter>Header Files\ECS\Components</Filter>
     </ClInclude>
@@ -156,6 +162,18 @@
       <Filter>Header Files\ECS\Entities</Filter>
     </ClInclude>
     <ClInclude Include="AISystem.hpp">
+      <Filter>Header Files\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerInteractionSystem.hpp">
+      <Filter>Header Files\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerMovementSystem.hpp">
+      <Filter>Header Files\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitsMovementSystem.hpp">
       <Filter>Header Files\ECS\Systems</Filter>
     </ClInclude>
   </ItemGroup>

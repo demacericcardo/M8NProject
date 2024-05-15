@@ -138,6 +138,7 @@
     <ClCompile Include="PlayerInteractionSystem.cpp" />
     <ClCompile Include="PlayerMovementSystem.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
+    <ClCompile Include="UnitsMovementSystem.cpp" />
     <ClCompile Include="Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +173,7 @@
     <ClInclude Include="StateComponent.hpp" />
     <ClInclude Include="System.hpp" />
     <ClInclude Include="Systems.hpp" />
+    <ClInclude Include="UnitsMovementSystem.hpp" />
     <ClInclude Include="Vector2D.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

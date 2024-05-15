@@ -7,6 +7,7 @@
 
 #include "Entity.hpp"
 #include "System.hpp"
+#include "Camera.hpp"
 
 class Entity;
 class System;
@@ -22,7 +23,7 @@ public:
 	{
 		for (auto& s : systems)
 		{
-			s->update(entities); 
+			s->update(entities);
 		}
 	}
 

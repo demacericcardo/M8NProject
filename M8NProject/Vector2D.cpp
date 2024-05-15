@@ -36,22 +36,22 @@ Vector2D& Vector2D::divide(const Vector2D& vec)
 	return *this;
 }
 
-Vector2D& operator+(Vector2D& v1, const Vector2D& v2)
+Vector2D operator+(Vector2D v1, const Vector2D& v2)
 {
 	return v1.add(v2);
 }
 
-Vector2D& operator-(Vector2D& v1, const Vector2D& v2)
+Vector2D operator-(Vector2D v1, const Vector2D& v2)
 {
 	return v1.subtract(v2);
 }
 
-Vector2D& operator*(Vector2D& v1, const Vector2D& v2)
+Vector2D operator*(Vector2D v1, const Vector2D& v2)
 {
 	return v1.multiply(v2);
 }
 
-Vector2D& operator/(Vector2D& v1, const Vector2D& v2)
+Vector2D operator/(Vector2D v1, const Vector2D& v2)
 {
 	return v1.divide(v2);
 }
@@ -84,6 +84,12 @@ Vector2D& Vector2D::operator*(const int& i)
 	return *this;
 }
 
+std::ostream& operator<<(std::ostream& stream, const Vector2D& vec)
+{
+	stream << "(" << vec.x << ", " << vec.y << ")";
+	return stream;
+}
+
 Vector2D& Vector2D::zero()
 {
 	this->x = 0;
@@ -92,8 +98,21 @@ Vector2D& Vector2D::zero()
 	return *this;
 }
 
-std::ostream& operator<<(std::ostream& stream, const Vector2D& vec)
+Vector2D Vector2D::lerp(const Vector2D& target, float factor) const
 {
-	stream << "(" << vec.x << ", " << vec.y << ")";
-	return stream;
+	Vector2D result;
+	result.x = x + factor * (target.x - x);
+	result.y = y + factor * (target.y - y);
+	return result;
+}
+
+float Vector2D::magnitude() const
+{
+	return sqrt(pow(x, 2) + pow(y, 2));
+}
+
+Vector2D Vector2D::normalize() const
+{
+	float mag = magnitude();
+	return Vector2D(x / mag, y / mag);
 }

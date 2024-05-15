@@ -8,7 +8,7 @@ int main(int argc, char* argv[])
 	const int maxFrameLenght = 1000 / FPS;
 
 	Uint32 frameStart;
-	int frameLenght;
+	int frameLength;
 
 	game = new Game();
 
@@ -17,14 +17,14 @@ int main(int argc, char* argv[])
 	while (game->running())
 	{
 		frameStart = SDL_GetTicks();
-
+		frameLength = SDL_GetTicks() - frameStart;
+		float deltaTime = frameLength / 1000.0f;
+		
 		game->handleEvents();
 		game->update();
 
-		frameLenght = SDL_GetTicks() - frameStart;
-
-		if (maxFrameLenght > frameLenght)
-			SDL_Delay(maxFrameLenght - frameLenght);
+		if (maxFrameLenght > frameLength)
+			SDL_Delay(maxFrameLenght - frameLength);
 	}
 
 	game->clean();

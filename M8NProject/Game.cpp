@@ -13,12 +13,6 @@ Manager manager;
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 
-const Uint8* Game::currentKeyStates = nullptr;
-
-Uint32 Game::mouseState = 0;
-int Game::mouseXPos = 0;
-int Game::mouseYPos = 0;
-
 Game::Game() : isRunning(false), window(nullptr) {}
 Game::~Game() {}
 
@@ -58,6 +52,7 @@ void Game::init(const char* title, bool fullscreen)
 	AISystem& aiSystem = manager.addSystem<AISystem>(manager);
 	PlayerMovementSystem& playerMovementSystem = manager.addSystem<PlayerMovementSystem>(manager);
 	PlayerInteractionSystem& playerInteractionSystem = manager.addSystem<PlayerInteractionSystem>(manager);
+	UnitsMovementSystem& unitsMovementSystem = manager.addSystem<UnitsMovementSystem>(manager);
 
 	Camera::getInstance().setTarget(player.getComponent<TransformComponent>());
 	Input::getInstance();
@@ -77,9 +72,9 @@ void Game::handleEvents()
 		break;
 	}
 
-	currentKeyStates = SDL_GetKeyboardState(NULL);
-
-	Game::mouseState = SDL_GetMouseState(&Game::mouseXPos, &Game::mouseYPos);
+	Input& input = Input::getInstance();
+	input.currentKeyStates = SDL_GetKeyboardState(NULL);
+	input.mouseState = SDL_GetMouseState(&input.mouseXPos, &input.mouseYPos);
 }
 
 void Game::update() {
@@ -139,6 +134,14 @@ void Game::loadTextures()
 	}
 
 	if (!AssetManager::getInstance().addTexture("bot", "assets/bot.png"))
+	{
+		std::cout << "Failed to add texture to AssetManager.\n";
+		isRunning = false;
+		return;
+	}
+
+
+	if (!AssetManager::getInstance().addTexture("botSelected", "assets/botSelected.png"))
 	{
 		std::cout << "Failed to add texture to AssetManager.\n";
 		isRunning = false;

@@ -44,6 +44,15 @@ void RenderSystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 			render.destRect.w = render.width * render.scale;
 			render.destRect.h = render.height * render.scale;
 
+			Bot* botEntity = dynamic_cast<Bot*>(entity.get());
+
+			if (botEntity) {
+				if (botEntity->isSelected)
+					botEntity->sprite->setTextureId("botSelected");
+				else
+					botEntity->sprite->setTextureId("bot");
+			}
+
 			renderAnimations(entity, render);
 			renderPlayerInterface(entity);
 
@@ -105,8 +114,8 @@ void RenderSystem::renderPlayerInterface(std::unique_ptr<Entity>& entity)
 			SDL_Rect rect{};
 			rect.x = static_cast<int>(input.mousePosClicked->x);
 			rect.y = static_cast<int>(input.mousePosClicked->y);
-			rect.w = Game::mouseXPos - static_cast<int>(input.mousePosClicked->x);
-			rect.h = Game::mouseYPos - static_cast<int>(input.mousePosClicked->y);
+			rect.w = input.mouseXPos - static_cast<int>(input.mousePosClicked->x);
+			rect.h = input.mouseYPos - static_cast<int>(input.mousePosClicked->y);
 
 			SDL_SetRenderDrawColor(Game::renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
 			SDL_RenderDrawRect(Game::renderer, &rect);

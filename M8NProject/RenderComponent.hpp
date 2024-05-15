@@ -31,5 +31,6 @@ public:
 	RenderComponent(std::string texId, SDL_Rect srcR, SDL_Rect destR, int h, int w, int s)
 		: textureID(texId), srcRect(srcR), destRect(destR), height(h), width(w), scale(s) {}
 
+	void setTextureId(std::string textureId) { textureID = textureId; }
 	std::string getTextureID() { return textureID; }
 };

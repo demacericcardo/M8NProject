@@ -1,39 +1,32 @@
 #pragma once
 
-
 #include "Entity.hpp"
 #include "Components.hpp"
 
 class Bot : public Entity
 {
 public:
-	float speed = 0.025f;
-	float stopDistance = 50.0f;
+	float speed = 5.0f;
+	float stopDistance = 10.0f;
 
 	bool isSelected = false;
 
-	TransformComponent* currentTarget;
-	TransformComponent* transform;
-	RenderComponent* sprite;
-	StateComponent* state;
-	AnimationComponent* animation;
+	bool hasCommand = false;
+	Vector2D currentDestination = {0, 0};
+
+	TransformComponent* transform = nullptr;
+	RenderComponent* sprite = nullptr;
 
 	Bot(Manager& manager, TransformComponent* target) : Entity(manager)
 	{
-		currentTarget = target;
 		transform = &addComponent<TransformComponent>(150.0f, 350.0f);
 		sprite = &addComponent<RenderComponent>("bot");
-		state = &addComponent<StateComponent>(State::IDLE);
-		//animation = &addComponent<AnimationComponent>(0, 1, 100);
 	}
 
 	Bot(Manager& manager, TransformComponent* target, float x, float y) : Entity(manager)
 	{
-		currentTarget = target;
 		transform = &addComponent<TransformComponent>(x, y);
 		sprite = &addComponent<RenderComponent>("bot");
-		state = &addComponent<StateComponent>(State::IDLE);
-		//animation = &addComponent<AnimationComponent>(0, 1, 100);
 	}
 
 	~Bot() {}

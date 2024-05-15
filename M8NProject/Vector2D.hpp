@@ -16,10 +16,10 @@ public:
 	Vector2D& multiply(const Vector2D& vec);
 	Vector2D& divide(const Vector2D& vec);
 
-	friend Vector2D& operator+(Vector2D& v1, const Vector2D& v2);
-	friend Vector2D& operator-(Vector2D& v1, const Vector2D& v2);
-	friend Vector2D& operator*(Vector2D& v1, const Vector2D& v2);
-	friend Vector2D& operator/(Vector2D& v1, const Vector2D& v2);
+	friend Vector2D operator+(Vector2D v1, const Vector2D& v2);
+	friend Vector2D operator-(Vector2D v1, const Vector2D& v2);
+	friend Vector2D operator*(Vector2D v1, const Vector2D& v2);
+	friend Vector2D operator/(Vector2D v1, const Vector2D& v2);
 
 	Vector2D& operator+=(const Vector2D& vec);
 	Vector2D& operator-=(const Vector2D& vec);
@@ -30,13 +30,10 @@ public:
 
 	Vector2D& zero();
 
-	Vector2D lerp(const Vector2D& target, float factor) const
-	{
-		Vector2D result;
-		result.x = x + factor * (target.x - x);
-		result.y = y + factor * (target.y - y);
-		return result;
-	}
+	Vector2D lerp(const Vector2D& target, float factor) const;
+
+	float magnitude() const;
+	Vector2D normalize() const;
 
 	friend std::ostream& operator<<(std::ostream& stream, const Vector2D& vec);
 };

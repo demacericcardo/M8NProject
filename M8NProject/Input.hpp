@@ -18,15 +18,22 @@ public:
 		return instance;
 	}
 
+	const Uint8* currentKeyStates = nullptr;
+
 	bool up = false;
 	bool down = false;
 	bool left = false;
 	bool right = false;
 
 	bool interact = false;
-	
+
+	int mouseXPos = 0;
+	int mouseYPos = 0;
+	Uint32 mouseState = 0;
+
 	bool mouseLeftClick = false;
+	bool mouseRightClick = false;
 
+	std::unique_ptr<Vector2D> mousePosClicked = nullptr;
 
-	std::unique_ptr<Vector2D> mousePosClicked;
 };
