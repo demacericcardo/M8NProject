@@ -1,3 +1,6 @@
 #pragma once
 
-#include "StateEnum.hpp"
+enum class State {
+	IDLE,
+	WALK
+};

@@ -1,9 +1,12 @@
+#pragma once
+
 #include "Game.hpp"
 #include "ECS.hpp"
 #include "Managers.hpp"
 #include "Entities.hpp"
 #include "Systems.hpp"
 #include "Camera.hpp"
+#include "Input.hpp"
 
 Manager manager;
 
@@ -43,45 +46,21 @@ void Game::init(const char* title, bool fullscreen)
 
 	Rock& rock = manager.addEntity<Rock>(manager);
 	Player& player = manager.addEntity<Player>(manager);
-	Bot& bot = manager.addEntity<Bot>(manager, player.transform);
+
+	Bot& bot1 = manager.addEntity<Bot>(manager, player.transform, 150.0f, 150.0f);
+	Bot& bot2 = manager.addEntity<Bot>(manager, player.transform, 200.0f, 250.0f);
+	Bot& bot3 = manager.addEntity<Bot>(manager, player.transform, 300.0f, 350.0f);
+	Bot& bot4 = manager.addEntity<Bot>(manager, player.transform, 50.0f, 550.0f);
 
 	RenderSystem& renderSystem = manager.addSystem<RenderSystem>(manager);
 	InputSystem& inputSystem = manager.addSystem<InputSystem>(manager);
 	CollisionSystem& collisionSystem = manager.addSystem<CollisionSystem>(manager);
 	AISystem& aiSystem = manager.addSystem<AISystem>(manager);
+	PlayerMovementSystem& playerMovementSystem = manager.addSystem<PlayerMovementSystem>(manager);
+	PlayerInteractionSystem& playerInteractionSystem = manager.addSystem<PlayerInteractionSystem>(manager);
 
 	Camera::getInstance().setTarget(player.getComponent<TransformComponent>());
-}
-
-void Game::loadTextures()
-{
-	if (!AssetManager::getInstance().addTexture("playerTexture", "assets/character.png"))
-	{
-		std::cout << "Failed to add texture to AssetManager.\n";
-		isRunning = false;
-		return;
-	}
-
-	if (!AssetManager::getInstance().addTexture("trigger", "assets/trigger.png"))
-	{
-		std::cout << "Failed to add texture to AssetManager.\n";
-		isRunning = false;
-		return;
-	}
-
-	if (!AssetManager::getInstance().addTexture("rockTexture", "assets/dirt.png"))
-	{
-		std::cout << "Failed to add texture to AssetManager.\n";
-		isRunning = false;
-		return;
-	}
-
-	if (!AssetManager::getInstance().addTexture("mineralInterface", "assets/water.png"))
-	{
-		std::cout << "Failed to add texture to AssetManager.\n";
-		isRunning = false;
-		return;
-	}
+	Input::getInstance();
 }
 
 void Game::handleEvents()
@@ -134,4 +113,35 @@ void Game::clean()
 	}
 
 	std::cout << "Game Cleaned..." << std::endl;
+}
+
+void Game::loadTextures()
+{
+	if (!AssetManager::getInstance().addTexture("playerTexture", "assets/character.png"))
+	{
+		std::cout << "Failed to add texture to AssetManager.\n";
+		isRunning = false;
+		return;
+	}
+
+	if (!AssetManager::getInstance().addTexture("trigger", "assets/trigger.png"))
+	{
+		std::cout << "Failed to add texture to AssetManager.\n";
+		isRunning = false;
+		return;
+	}
+
+	if (!AssetManager::getInstance().addTexture("rockTexture", "assets/dirt.png"))
+	{
+		std::cout << "Failed to add texture to AssetManager.\n";
+		isRunning = false;
+		return;
+	}
+
+	if (!AssetManager::getInstance().addTexture("bot", "assets/bot.png"))
+	{
+		std::cout << "Failed to add texture to AssetManager.\n";
+		isRunning = false;
+		return;
+	}
 }

@@ -32,10 +32,10 @@ void CollisionSystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 						{
 							Player* playerEntity = dynamic_cast<Player*>(entity1.get());
 
-							if (playerCollider.collidesWith(colliderBlock))
+							if (collidesWith(playerCollider, colliderBlock))
 								playerEntity->transform->position = playerEntity->transform->previousPosition;
 
-							if (playerCollider.collidesWith(colliderInteractable))
+							if (collidesWith(playerCollider, colliderInteractable))
 								playerEntity->interactableEntity = entity2.get();
 							else
 								playerEntity->interactableEntity = nullptr;
@@ -45,4 +45,9 @@ void CollisionSystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 			}
 		}
 	}
+}
+
+bool CollisionSystem::collidesWith(const ColliderComponent& first, const ColliderComponent& second)
+{
+	return SDL_HasIntersection(&first.collider, &second.collider);
 }

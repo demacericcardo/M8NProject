@@ -18,4 +18,6 @@ public:
 	~RenderSystem() {}
 
 	void update(std::vector<std::unique_ptr<Entity>>& entities) override;
+	void renderPlayerInterface(std::unique_ptr<Entity>& entity);
+	void renderAnimations(std::unique_ptr<Entity>& entity, RenderComponent& render);
 };

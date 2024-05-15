@@ -21,10 +21,20 @@ public:
 	Bot(Manager& manager, TransformComponent* target) : Entity(manager)
 	{
 		currentTarget = target;
-		transform = &addComponent<TransformComponent>(200.0f, 200.0f);
-		sprite = &addComponent<RenderComponent>("playerTexture");
+		transform = &addComponent<TransformComponent>(150.0f, 350.0f);
+		sprite = &addComponent<RenderComponent>("bot");
 		state = &addComponent<StateComponent>(State::IDLE);
-		animation = &addComponent<AnimationComponent>(0, 2, 100);
+		//animation = &addComponent<AnimationComponent>(0, 1, 100);
 	}
+
+	Bot(Manager& manager, TransformComponent* target, float x, float y) : Entity(manager)
+	{
+		currentTarget = target;
+		transform = &addComponent<TransformComponent>(x, y);
+		sprite = &addComponent<RenderComponent>("bot");
+		state = &addComponent<StateComponent>(State::IDLE);
+		//animation = &addComponent<AnimationComponent>(0, 1, 100);
+	}
+
 	~Bot() {}
 };

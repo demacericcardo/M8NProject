@@ -24,8 +24,8 @@ public:
 
 	bool running() const { return isRunning; }
 
-	static const int SCREEN_WIDTH = 1600;
-	static const int SCREEN_HEIGHT = 1280;
+	static const int SCREEN_WIDTH = 1280;
+	static const int SCREEN_HEIGHT = 720;
 
 	static const Uint8* currentKeyStates;
 

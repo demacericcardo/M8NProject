@@ -104,6 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -128,11 +129,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AISystem.cpp" />
+    <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionSystem.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Input.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PlayerInteractionSystem.cpp" />
+    <ClCompile Include="PlayerMovementSystem.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="Vector2D.cpp" />
   </ItemGroup>
@@ -154,17 +159,18 @@
     <ClInclude Include="Entity.hpp" />
     <ClInclude Include="Enums.hpp" />
     <ClInclude Include="Game.hpp" />
-    <ClInclude Include="InputComponent.hpp" />
     <ClInclude Include="AssetManager.hpp" />
+    <ClInclude Include="Input.hpp" />
     <ClInclude Include="InputSystem.hpp" />
     <ClInclude Include="Manager.hpp" />
     <ClInclude Include="Managers.hpp" />
     <ClInclude Include="Player.hpp" />
+    <ClInclude Include="PlayerInteractionSystem.hpp" />
+    <ClInclude Include="PlayerMovementSystem.hpp" />
     <ClInclude Include="RenderComponent.hpp" />
     <ClInclude Include="RenderSystem.hpp" />
     <ClInclude Include="Rock.hpp" />
     <ClInclude Include="StateComponent.hpp" />
-    <ClInclude Include="StateEnum.hpp" />
     <ClInclude Include="System.hpp" />
     <ClInclude Include="Systems.hpp" />
     <ClInclude Include="Vector2D.hpp" />

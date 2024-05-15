@@ -8,6 +8,15 @@
 class InputSystem : public System
 {
 public:
+	bool up = false;
+	bool down = false;
+	bool left = false;
+	bool right = false;
+	bool interact = false;
+	bool mouseLeftClick = false;
+
+	std::unique_ptr<Vector2D> mousePosClicked;
+
 	InputSystem(Manager& manager) : System(manager) {}
 	~InputSystem() {}
 

@@ -10,4 +10,6 @@ public:
 	~CollisionSystem() {}
 
 	void update(std::vector<std::unique_ptr<Entity>>& entities) override;
+
+	bool collidesWith(const ColliderComponent& first, const ColliderComponent& second);
 };

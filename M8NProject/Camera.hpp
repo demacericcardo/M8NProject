@@ -11,9 +11,18 @@ private:
 	Vector2D position;
 	TransformComponent* target;
 
+	float cameraSpeed = 0.25f;
+
 	Camera() : target(nullptr) {}
 public:
-	static Camera& getInstance();
+	Camera(const Camera&) = delete;
+	Camera& operator=(const Camera&) = delete;
+
+	static Camera& getInstance()
+	{
+		static Camera instance;
+		return instance;
+	}
 
 	void setTarget(TransformComponent& target);
 	void update();
