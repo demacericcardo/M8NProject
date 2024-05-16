@@ -1,6 +1,11 @@
 #pragma once
 
-enum class State {
+enum class PlayerState {
+	IDLE,
+	WALK
+};
+
+enum class BotState {
 	IDLE,
 	WALK
 };

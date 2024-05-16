@@ -1,6 +1,7 @@
 #include "PlayerMovementSystem.hpp"
 #include "Input.hpp"
 #include "Player.hpp"
+#include "ParticleEmitter.hpp"
 
 void PlayerMovementSystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 {
@@ -37,9 +38,15 @@ void PlayerMovementSystem::update(std::vector<std::unique_ptr<Entity>>& entities
 			}
 
 			if (transform.velocity.x != 0 || transform.velocity.y != 0)
-				state.setState(State::WALK);
+			{
+				state.setState(PlayerState::WALK);
+				if (!ParticleEmitter::getInstance().hasParticleByTextureID("walkParticle"))
+					ParticleEmitter::getInstance().emitParticle("walkParticle", transform.position, Vector2D(0, 0), 0.025f);
+			}
 			else
-				state.setState(State::IDLE);
+			{
+				state.setState(PlayerState::IDLE);
+			}
 
 			transform.previousPosition = transform.position;
 			transform.position.x += transform.velocity.x * static_cast<float>(transform.speed);

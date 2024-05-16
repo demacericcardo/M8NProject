@@ -7,11 +7,14 @@
 #include "Systems.hpp"
 #include "Camera.hpp"
 #include "Input.hpp"
+#include "ParticleEmitter.hpp"
 
 Manager manager;
 
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
+
+float Game::deltaTime = 0.0f;
 
 Game::Game() : isRunning(false), window(nullptr) {}
 Game::~Game() {}
@@ -28,6 +31,7 @@ void Game::init(const char* title, bool fullscreen)
 		renderer = SDL_CreateRenderer(window, -1, 0);
 
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+		SDL_ShowCursor(SDL_DISABLE);
 
 		isRunning = true;
 	}
@@ -37,6 +41,7 @@ void Game::init(const char* title, bool fullscreen)
 	}
 
 	loadTextures();
+	loadAnimations();
 
 	Rock& rock = manager.addEntity<Rock>(manager);
 	Player& player = manager.addEntity<Player>(manager);
@@ -46,16 +51,22 @@ void Game::init(const char* title, bool fullscreen)
 	Bot& bot3 = manager.addEntity<Bot>(manager, player.transform, 300.0f, 350.0f);
 	Bot& bot4 = manager.addEntity<Bot>(manager, player.transform, 50.0f, 550.0f);
 
-	RenderSystem& renderSystem = manager.addSystem<RenderSystem>(manager);
-	InputSystem& inputSystem = manager.addSystem<InputSystem>(manager);
-	CollisionSystem& collisionSystem = manager.addSystem<CollisionSystem>(manager);
-	AISystem& aiSystem = manager.addSystem<AISystem>(manager);
-	PlayerMovementSystem& playerMovementSystem = manager.addSystem<PlayerMovementSystem>(manager);
-	PlayerInteractionSystem& playerInteractionSystem = manager.addSystem<PlayerInteractionSystem>(manager);
-	UnitsMovementSystem& unitsMovementSystem = manager.addSystem<UnitsMovementSystem>(manager);
+	initSystems();
 
 	Camera::getInstance().setTarget(player.getComponent<TransformComponent>());
 	Input::getInstance();
+}
+
+void Game::initSystems()
+{
+	manager.addSystem<RenderSystem>(manager);
+	manager.addSystem<InputSystem>(manager);
+	manager.addSystem<CollisionSystem>(manager);
+	manager.addSystem<AISystem>(manager);
+	manager.addSystem<PlayerMovementSystem>(manager);
+	manager.addSystem<PlayerInteractionSystem>(manager);
+	manager.addSystem<UnitsMovementSystem>(manager);
+	manager.addSystem<StateAnimationSystem>(manager);
 }
 
 void Game::handleEvents()
@@ -78,9 +89,27 @@ void Game::handleEvents()
 }
 
 void Game::update() {
+	Uint32 start_time = SDL_GetTicks();
+
 	manager.refresh();
+
+	SDL_RenderClear(Game::renderer);
+	ParticleEmitter::getInstance().update();
 	manager.update();
+
+	Input& input = Input::getInstance();
+
+	SDL_Rect cursorRect = { input.mouseXPos, input.mouseYPos, 32, 32 };
+	SDL_Rect srcRect = { 0, 0, 32, 32 };
+
+	SDL_RenderCopy(Game::renderer, AssetManager::getInstance().getTexture("cursor"), &srcRect, &cursorRect);
+
+	SDL_RenderPresent(Game::renderer);
+
 	Camera::getInstance().update();
+
+	Uint32 end_time = SDL_GetTicks();
+	Game::deltaTime = (end_time - start_time) / 1000.0f;
 }
 
 void Game::clean()
@@ -112,39 +141,42 @@ void Game::clean()
 
 void Game::loadTextures()
 {
-	if (!AssetManager::getInstance().addTexture("playerTexture", "assets/character.png"))
+	std::vector<std::pair<std::string, std::string>> textures = {
+		{"playerTexture", "assets/character.png"},
+		{"trigger", "assets/trigger.png"},
+		{"rockTexture", "assets/dirt.png"},
+		{"bot", "assets/bot.png"},
+		{"botSelected", "assets/botSelected.png"},
+		{"walkParticle", "assets/walkParticle.png"},
+		{ "cursor", "assets/cursor.png" }
+	};
+
+	for (const auto& texture : textures)
 	{
-		std::cout << "Failed to add texture to AssetManager.\n";
-		isRunning = false;
-		return;
+		if (!AssetManager::getInstance().addTexture(texture.first, texture.second.c_str()))
+		{
+			std::cout << "Failed to add texture to AssetManager.\n";
+			isRunning = false;
+			return;
+		}
 	}
+}
 
-	if (!AssetManager::getInstance().addTexture("trigger", "assets/trigger.png"))
+void Game::loadAnimations()
+{
+	std::vector<std::tuple<std::string, int, int, int>> animations = {
+		{"playerIdle", 0, 2, 200},
+		{"playerWalk", 1, 4, 150},
+		{"botIdle", 0, 2, 200}
+	};
+
+	for (const auto& animation : animations)
 	{
-		std::cout << "Failed to add texture to AssetManager.\n";
-		isRunning = false;
-		return;
-	}
-
-	if (!AssetManager::getInstance().addTexture("rockTexture", "assets/dirt.png"))
-	{
-		std::cout << "Failed to add texture to AssetManager.\n";
-		isRunning = false;
-		return;
-	}
-
-	if (!AssetManager::getInstance().addTexture("bot", "assets/bot.png"))
-	{
-		std::cout << "Failed to add texture to AssetManager.\n";
-		isRunning = false;
-		return;
-	}
-
-
-	if (!AssetManager::getInstance().addTexture("botSelected", "assets/botSelected.png"))
-	{
-		std::cout << "Failed to add texture to AssetManager.\n";
-		isRunning = false;
-		return;
+		if (!AnimationManager::getInstance().addAnimation(std::get<0>(animation), std::get<1>(animation), std::get<2>(animation), std::get<3>(animation)))
+		{
+			std::cout << "Failed to add animation to AnimationManager.\n";
+			isRunning = false;
+			return;
+		}
 	}
 }

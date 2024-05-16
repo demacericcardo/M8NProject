@@ -35,5 +35,4 @@ public:
 	bool mouseRightClick = false;
 
 	std::unique_ptr<Vector2D> mousePosClicked = nullptr;
-
 };

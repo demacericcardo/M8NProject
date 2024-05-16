@@ -1,14 +1,21 @@
 #pragma once
 
+#include <string>
+
 #include "ECS.hpp"
+#include "Animation.hpp"
+#include "AnimationManager.hpp"
 
 class AnimationComponent : public Component
 {
+private:
+	Animation* currentAnimation = nullptr;
 public:
-	int index;
-	int frames;
-	int speed;
 
-	AnimationComponent(int i, int f, int s) : index(i), frames(f), speed(s) {}
+	AnimationComponent() { }
+	AnimationComponent(std::string animationName) { currentAnimation = AnimationManager::getInstance().getAnimation(animationName); }
 	~AnimationComponent() {}
+
+	Animation* getAnimation() { return currentAnimation; }
+	void setAnimation(std::string animationName) { currentAnimation = AnimationManager::getInstance().getAnimation(animationName); }
 };

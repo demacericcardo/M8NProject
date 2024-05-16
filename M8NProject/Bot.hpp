@@ -11,22 +11,24 @@ public:
 
 	bool isSelected = false;
 
-	bool hasCommand = false;
-	Vector2D currentDestination = {0, 0};
+	std::unique_ptr<Vector2D> currentDestination = nullptr;
 
 	TransformComponent* transform = nullptr;
 	RenderComponent* sprite = nullptr;
+	AnimationComponent* animation = nullptr;
 
 	Bot(Manager& manager, TransformComponent* target) : Entity(manager)
 	{
-		transform = &addComponent<TransformComponent>(150.0f, 350.0f);
+		transform = &addComponent<TransformComponent>();
 		sprite = &addComponent<RenderComponent>("bot");
+		animation = &addComponent<AnimationComponent>("botIdle");
 	}
 
 	Bot(Manager& manager, TransformComponent* target, float x, float y) : Entity(manager)
 	{
 		transform = &addComponent<TransformComponent>(x, y);
 		sprite = &addComponent<RenderComponent>("bot");
+		animation = &addComponent<AnimationComponent>("botIdle");
 	}
 
 	~Bot() {}

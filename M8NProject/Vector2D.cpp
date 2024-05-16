@@ -108,7 +108,7 @@ Vector2D Vector2D::lerp(const Vector2D& target, float factor) const
 
 float Vector2D::magnitude() const
 {
-	return sqrt(pow(x, 2) + pow(y, 2));
+	return static_cast<float>(sqrt(pow(x, 2) + pow(y, 2)));
 }
 
 Vector2D Vector2D::normalize() const

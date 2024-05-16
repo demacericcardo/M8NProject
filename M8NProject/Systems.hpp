@@ -7,3 +7,4 @@
 #include "PlayerMovementSystem.hpp"
 #include "PlayerInteractionSystem.hpp"
 #include "UnitsMovementSystem.hpp"
+#include "StateAnimationSystem.hpp"

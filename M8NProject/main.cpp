@@ -18,7 +18,6 @@ int main(int argc, char* argv[])
 	{
 		frameStart = SDL_GetTicks();
 		frameLength = SDL_GetTicks() - frameStart;
-		float deltaTime = frameLength / 1000.0f;
 		
 		game->handleEvents();
 		game->update();

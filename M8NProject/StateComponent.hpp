@@ -6,10 +6,10 @@
 class StateComponent : public Component
 {
 private:
-	State state;
+	PlayerState state;
 public:
-	StateComponent(State initialState) :state(initialState) {}
+	StateComponent(PlayerState initialState) :state(initialState) {}
 
-	State getState() const { return state; }
-	void setState(State newState) { state = newState; }
+	PlayerState getState() const { return state; }
+	void setState(PlayerState newState) { state = newState; }
 };

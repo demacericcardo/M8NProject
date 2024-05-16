@@ -18,7 +18,6 @@ RenderSystem::RenderSystem(Manager& manager) : System(manager)
 
 void RenderSystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 {
-	SDL_RenderClear(Game::renderer);
 	Vector2D cameraPos = Camera::getInstance().getPosition();
 
 	std::sort(entities.begin(), entities.end(), [](const std::unique_ptr<Entity>& a, const std::unique_ptr<Entity>& b) {
@@ -44,47 +43,25 @@ void RenderSystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 			render.destRect.w = render.width * render.scale;
 			render.destRect.h = render.height * render.scale;
 
-			Bot* botEntity = dynamic_cast<Bot*>(entity.get());
-
-			if (botEntity) {
-				if (botEntity->isSelected)
-					botEntity->sprite->setTextureId("botSelected");
-				else
-					botEntity->sprite->setTextureId("bot");
-			}
-
 			renderAnimations(entity, render);
-			renderPlayerInterface(entity);
 
 			SDL_RenderCopy(Game::renderer, AssetManager::getInstance().getTexture(render.getTextureID()), &render.srcRect, &render.destRect);
 		}
+
+		renderPlayerInterface(entity);
 	}
-	SDL_RenderPresent(Game::renderer);
 }
 
 void RenderSystem::renderAnimations(std::unique_ptr<Entity>& entity, RenderComponent& render)
 {
-	if (entity->hasComponent<AnimationComponent>() && entity->hasComponent<StateComponent>())
+	if (entity->hasComponent<AnimationComponent>())
 	{
 		AnimationComponent& animation = entity->getComponent<AnimationComponent>();
-		const StateComponent& state = entity->getComponent<StateComponent>();
 
-		switch (state.getState())
-		{
-		case State::IDLE:
-			animation.index = 0;
-			animation.frames = 2;
-			break;
-		case State::WALK:
-			animation.index = 1;
-			animation.frames = 5;
-			break;
-		default:
-			break;
+		if (animation.getAnimation()) {
+			render.srcRect.y = animation.getAnimation()->index * render.height;
+			render.srcRect.x = render.srcRect.w * static_cast<int>((SDL_GetTicks() / animation.getAnimation()->speed) % animation.getAnimation()->frames);
 		}
-
-		render.srcRect.y = animation.index * render.height;
-		render.srcRect.x = render.srcRect.w * static_cast<int>((SDL_GetTicks() / animation.speed) % animation.frames);
 	}
 }
 

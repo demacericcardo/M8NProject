@@ -14,9 +14,11 @@ void AISystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 	{
 		Bot* botEntity = dynamic_cast<Bot*>(entity.get());
 
-		if (botEntity)
+		if (botEntity && botEntity->hasComponent<TransformComponent>())
 		{
-			if (input.mousePosClicked && botEntity->hasComponent<TransformComponent>())
+			TransformComponent& transformComponent = botEntity->getComponent<TransformComponent>();
+
+			if (input.mousePosClicked)
 			{
 				const TransformComponent& transform = botEntity->getComponent<TransformComponent>();
 				SDL_Point botPosition = { static_cast<int>(transform.position.x - cameraPos.x), static_cast<int>(transform.position.y - cameraPos.y) };
@@ -34,27 +36,39 @@ void AISystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 					botEntity->isSelected = false;
 			}
 
-			if (input.mouseRightClick && botEntity->isSelected && botEntity->hasComponent<TransformComponent>())
+			if (botEntity->isSelected)
+				botEntity->sprite->setTextureId("botSelected");
+			else
+				botEntity->sprite->setTextureId("bot");
+
+			if (input.mouseRightClick && botEntity->isSelected)
 			{
-				const TransformComponent& transform = botEntity->getComponent<TransformComponent>();
-				botEntity->currentDestination = { static_cast<float>(input.mouseXPos + cameraPos.x), static_cast<float>(input.mouseYPos + cameraPos.y) };
-				botEntity->hasCommand = true;
+				ParticleEmitter::getInstance().emitParticle("walkParticle", { static_cast<float>(input.mouseXPos) + cameraPos.x, static_cast<float>(input.mouseYPos) + cameraPos.y }, Vector2D(0, 0), 0.025f);
+
+				if (botEntity->currentDestination)
+				{
+					botEntity->currentDestination->x = static_cast<float>(input.mouseXPos + cameraPos.x);
+					botEntity->currentDestination->y = static_cast<float>(input.mouseYPos + cameraPos.y);
+				}
+				else
+				{
+					botEntity->currentDestination = std::make_unique<Vector2D>(static_cast<float>(input.mouseXPos + cameraPos.x), static_cast<float>(input.mouseYPos + cameraPos.y));
+				}
 			}
 
-			if (botEntity->hasCommand && botEntity->hasComponent<TransformComponent>())
+			if (botEntity->currentDestination)
 			{
-				TransformComponent& transform = botEntity->getComponent<TransformComponent>();
-				Vector2D direction = botEntity->currentDestination - transform.position;
+				Vector2D direction = *botEntity->currentDestination - transformComponent.position;
 				float distance = direction.magnitude();
 
 				if (distance > botEntity->stopDistance)
 				{
 					direction = direction.normalize();
-					transform.position += direction * (botEntity->speed);
+					transformComponent.position += Vector2D(static_cast<int>(direction.x * botEntity->speed), static_cast<int>(direction.y * botEntity->speed));
 				}
 				else
 				{
-					botEntity->hasCommand = false;
+					botEntity->currentDestination.reset();
 				}
 			}
 		}
