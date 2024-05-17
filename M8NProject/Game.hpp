@@ -17,6 +17,7 @@ public:
 	~Game();
 
 	void init(const char* title, bool fullscreen);
+	void renderTiles();
 	void initSystems();
 	void handleEvents();
 	void update();

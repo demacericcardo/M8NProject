@@ -57,6 +57,22 @@ void Game::init(const char* title, bool fullscreen)
 	Input::getInstance();
 }
 
+void Game::renderTiles() {
+	int startTileX = Camera::getInstance().getPosition().x / 32 - 2;
+	int startTileY = Camera::getInstance().getPosition().y / 32 - 2;
+	int endTileX = startTileX + (Game::SCREEN_WIDTH / 32) + 2;
+	int endTileY = startTileY + (Game::SCREEN_HEIGHT / 32) + 2;
+
+	for (int y = startTileY; y < endTileY; y++) {
+		for (int x = startTileX; x < endTileX; x++) {
+			//Tile& tile = map.getTile(x, y);
+			SDL_Rect destRect = { (x * 32) - Camera::getInstance().getPosition().x, (y * 32) - Camera::getInstance().getPosition().y, 32, 32 };
+			SDL_RenderCopy(Game::renderer, AssetManager::getInstance().getTexture("ground"), NULL, &destRect);
+		}
+	}
+}
+
+
 void Game::initSystems()
 {
 	manager.addSystem<RenderSystem>(manager);
@@ -89,24 +105,31 @@ void Game::handleEvents()
 }
 
 void Game::update() {
+
 	Uint32 start_time = SDL_GetTicks();
 
 	manager.refresh();
 
 	SDL_RenderClear(Game::renderer);
+
+	Camera::getInstance().update();
+
+	renderTiles();
+
 	ParticleEmitter::getInstance().update();
+
 	manager.update();
 
+	/*
 	Input& input = Input::getInstance();
 
 	SDL_Rect cursorRect = { input.mouseXPos, input.mouseYPos, 32, 32 };
 	SDL_Rect srcRect = { 0, 0, 32, 32 };
 
 	SDL_RenderCopy(Game::renderer, AssetManager::getInstance().getTexture("cursor"), &srcRect, &cursorRect);
+	*/
 
 	SDL_RenderPresent(Game::renderer);
-
-	Camera::getInstance().update();
 
 	Uint32 end_time = SDL_GetTicks();
 	Game::deltaTime = (end_time - start_time) / 1000.0f;
@@ -148,7 +171,8 @@ void Game::loadTextures()
 		{"bot", "assets/bot.png"},
 		{"botSelected", "assets/botSelected.png"},
 		{"walkParticle", "assets/walkParticle.png"},
-		{ "cursor", "assets/cursor.png" }
+		{ "cursor", "assets/cursor.png" },
+		{ "ground", "assets/ground.png" }
 	};
 
 	for (const auto& texture : textures)

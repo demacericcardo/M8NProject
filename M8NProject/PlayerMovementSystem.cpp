@@ -31,15 +31,9 @@ void PlayerMovementSystem::update(std::vector<std::unique_ptr<Entity>>& entities
 			else if (input.right)
 				transform.velocity.x = 1.0f;
 
-			if (transform.velocity.x != 0 && transform.velocity.y != 0)
-			{
-				float length = sqrt(transform.velocity.x * transform.velocity.x + transform.velocity.y * transform.velocity.y);
-				transform.velocity.x /= length;
-				transform.velocity.y /= length;
-			}
-
 			if (transform.velocity.x != 0 || transform.velocity.y != 0)
 			{
+				transform.velocity = transform.velocity.normalize();
 				render.isFlipped = transform.velocity.x > 0;
 
 				state.setState(PlayerState::WALK);

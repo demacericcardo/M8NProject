@@ -17,10 +17,11 @@ int main(int argc, char* argv[])
 	while (game->running())
 	{
 		frameStart = SDL_GetTicks();
-		frameLength = SDL_GetTicks() - frameStart;
 		
 		game->handleEvents();
 		game->update();
+
+		frameLength = SDL_GetTicks() - frameStart;
 
 		if (maxFrameLenght > frameLength)
 			SDL_Delay(maxFrameLenght - frameLength);
