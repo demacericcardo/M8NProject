@@ -45,7 +45,8 @@ void RenderSystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 
 			renderAnimations(entity, render);
 
-			SDL_RenderCopy(Game::renderer, AssetManager::getInstance().getTexture(render.getTextureID()), &render.srcRect, &render.destRect);
+			SDL_RendererFlip flip = render.isFlipped ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+			SDL_RenderCopyEx(Game::renderer, AssetManager::getInstance().getTexture(render.getTextureID()), &render.srcRect, &render.destRect, 0, NULL, flip);
 		}
 
 		renderPlayerInterface(entity);

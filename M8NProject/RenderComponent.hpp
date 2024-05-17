@@ -19,6 +19,8 @@ public:
 	int width = 32;
 	int scale = 1;
 
+	bool isFlipped = false;
+
 	RenderComponent(std::string texId)
 		: textureID(texId) {}
 

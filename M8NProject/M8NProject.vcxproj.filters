@@ -40,8 +40,20 @@
     <Filter Include="Header Files\Enums">
       <UniqueIdentifier>{f020a4e8-e50a-40fe-b5ae-81eb58c98564}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Systems">
+    <Filter Include="Source Files\ECS">
+      <UniqueIdentifier>{d6066e12-b129-47f0-adf1-fcd293aa627a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ECS\Systems">
       <UniqueIdentifier>{bc841b2d-42cc-458d-b51b-b4298fe209e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ECS\Managers">
+      <UniqueIdentifier>{d83a5fc2-c249-4fd5-a676-14daf611866f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utils">
+      <UniqueIdentifier>{090fcc76-1bb0-43fa-82d2-c8367f65637c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utils">
+      <UniqueIdentifier>{105c4c15-1776-4b97-8f76-0d652b6684fa}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -54,32 +66,44 @@
     <ClCompile Include="Vector2D.cpp">
       <Filter>Source Files\Generics</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AISystem.cpp">
-      <Filter>Source Files\Systems</Filter>
+      <Filter>Source Files\ECS\Systems</Filter>
     </ClCompile>
     <ClCompile Include="CollisionSystem.cpp">
-      <Filter>Source Files\Systems</Filter>
+      <Filter>Source Files\ECS\Systems</Filter>
     </ClCompile>
     <ClCompile Include="InputSystem.cpp">
-      <Filter>Source Files\Systems</Filter>
+      <Filter>Source Files\ECS\Systems</Filter>
     </ClCompile>
     <ClCompile Include="RenderSystem.cpp">
-      <Filter>Source Files\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="AssetManager.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\ECS\Systems</Filter>
     </ClCompile>
     <ClCompile Include="PlayerInteractionSystem.cpp">
-      <Filter>Source Files\Systems</Filter>
+      <Filter>Source Files\ECS\Systems</Filter>
     </ClCompile>
     <ClCompile Include="PlayerMovementSystem.cpp">
-      <Filter>Source Files\Systems</Filter>
+      <Filter>Source Files\ECS\Systems</Filter>
     </ClCompile>
     <ClCompile Include="UnitsMovementSystem.cpp">
-      <Filter>Source Files\Systems</Filter>
+      <Filter>Source Files\ECS\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationManager.cpp">
+      <Filter>Source Files\ECS\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetManager.cpp">
+      <Filter>Source Files\ECS\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="StateAnimationSystem.cpp">
+      <Filter>Source Files\ECS\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>Source Files\Generics</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleEmitter.cpp">
+      <Filter>Source Files\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -146,9 +170,6 @@
     <ClInclude Include="AnimationComponent.hpp">
       <Filter>Header Files\ECS\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Rock.hpp">
       <Filter>Header Files\ECS\Entities</Filter>
     </ClInclude>
@@ -164,9 +185,6 @@
     <ClInclude Include="AISystem.hpp">
       <Filter>Header Files\ECS\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="Input.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerInteractionSystem.hpp">
       <Filter>Header Files\ECS\Systems</Filter>
     </ClInclude>
@@ -175,6 +193,27 @@
     </ClInclude>
     <ClInclude Include="UnitsMovementSystem.hpp">
       <Filter>Header Files\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.hpp">
+      <Filter>Header Files\Generics</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.hpp">
+      <Filter>Header Files\Generics</Filter>
+    </ClInclude>
+    <ClInclude Include="StateAnimationSystem.hpp">
+      <Filter>Header Files\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationManager.hpp">
+      <Filter>Header Files\ECS\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.hpp">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleEmitter.hpp">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.hpp">
+      <Filter>Header Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
