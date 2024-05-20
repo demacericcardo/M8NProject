@@ -12,7 +12,7 @@ void AnimationSystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 			Animation* animationData = animation.getAnimation();
 			if (animationData) {
 				render.srcRect.y = animationData->index * render.height;
-				render.srcRect.x = render.srcRect.w * static_cast<int>((SDL_GetTicks() / animationData->speed) % animationData->frames);
+				render.srcRect.x = static_cast<int>(animationData->speed * SDL_GetTicks()) % animationData->frames;
 			}
 		}
 	}

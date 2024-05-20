@@ -6,7 +6,7 @@
 class Unit : public Entity
 {
 public:
-	float speed = 50.0f;
+	float speed = 250.0f;
 	float stopDistance = 10.0f;
 
 	bool isSelected = false;

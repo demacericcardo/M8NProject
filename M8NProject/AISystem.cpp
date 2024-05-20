@@ -12,15 +12,15 @@ void AISystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 
 	for (auto& entity : entities)
 	{
-		Unit* botEntity = dynamic_cast<Unit*>(entity.get());
+		Unit* unitEntity = dynamic_cast<Unit*>(entity.get());
 
-		if (botEntity && botEntity->hasComponent<TransformComponent>())
+		if (unitEntity && unitEntity->hasComponent<TransformComponent>())
 		{
-			TransformComponent& transformComponent = botEntity->getComponent<TransformComponent>();
+			TransformComponent& transformComponent = unitEntity->getComponent<TransformComponent>();
 
 			if (input.mousePosClicked)
 			{
-				const TransformComponent& transform = botEntity->getComponent<TransformComponent>();
+				const TransformComponent& transform = unitEntity->getComponent<TransformComponent>();
 				SDL_Point botPosition = { static_cast<int>(transform.position.x - cameraPos.x), static_cast<int>(transform.position.y - cameraPos.y) };
 
 				int minX = std::min(input.mouseXPos, static_cast<int>(input.mousePosClicked->x));
@@ -31,45 +31,44 @@ void AISystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 				SDL_Rect rect = { minX, minY, maxX - minX, maxY - minY };
 
 				if (SDL_PointInRect(&botPosition, &rect))
-					botEntity->isSelected = true;
+					unitEntity->isSelected = true;
 				else
-					botEntity->isSelected = false;
+					unitEntity->isSelected = false;
 			}
 
-			if (botEntity->isSelected)
-				botEntity->sprite->setTextureId("botSelected");
+			if (unitEntity->isSelected)
+				unitEntity->sprite->setTextureId("botSelected");
 			else
-				botEntity->sprite->setTextureId("bot");
+				unitEntity->sprite->setTextureId("bot");
 
-			if (input.mouseRightClick && botEntity->isSelected)
+			if (input.mouseRightClick && unitEntity->isSelected)
 			{
 				ParticleEmitter::getInstance().emitParticle("walkParticle", { static_cast<float>(input.mouseXPos) + cameraPos.x, static_cast<float>(input.mouseYPos) + cameraPos.y }, Vector2D(0, 0), 0.025f);
 
-				if (botEntity->currentDestination)
+				if (unitEntity->currentDestination)
 				{
-					botEntity->currentDestination->x = static_cast<float>(input.mouseXPos + cameraPos.x);
-					botEntity->currentDestination->y = static_cast<float>(input.mouseYPos + cameraPos.y);
+					unitEntity->currentDestination->x = static_cast<float>(input.mouseXPos + cameraPos.x);
+					unitEntity->currentDestination->y = static_cast<float>(input.mouseYPos + cameraPos.y);
 				}
 				else
 				{
-					botEntity->currentDestination = std::make_unique<Vector2D>(static_cast<float>(input.mouseXPos + cameraPos.x), static_cast<float>(input.mouseYPos + cameraPos.y));
+					unitEntity->currentDestination = std::make_unique<Vector2D>(static_cast<float>(input.mouseXPos + cameraPos.x), static_cast<float>(input.mouseYPos + cameraPos.y));
 				}
 			}
 
-			if (botEntity->currentDestination)
+			if (unitEntity->currentDestination)
 			{
-				Vector2D direction = *botEntity->currentDestination - transformComponent.position;
+				Vector2D direction = *unitEntity->currentDestination - transformComponent.position;
 				float distance = direction.magnitude();
 
-				if (distance > botEntity->stopDistance)
+				if (distance > unitEntity->stopDistance)
 				{
 					direction = direction.normalize();
-					//TODO non se move un cazzo dio ladruncolo
-					transformComponent.position += Vector2D(static_cast<int>(direction.x * botEntity->speed * Game::frameLength), static_cast<int>(direction.y * botEntity->speed * Game::frameLength));
+					transformComponent.position += Vector2D(direction.x * unitEntity->speed * Game::frameLength, direction.y * unitEntity->speed * Game::frameLength);
 				}
 				else
 				{
-					botEntity->currentDestination.reset();
+					unitEntity->currentDestination.reset();
 				}
 			}
 		}

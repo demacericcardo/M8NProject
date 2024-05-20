@@ -4,9 +4,9 @@ class Animation
 public:
 	int index;
 	int frames;
-	int speed;
+	float speed;
 
-	Animation(int index, int frames, int speed)
+	Animation(int index, int frames, float speed)
 		: index(index), frames(frames), speed(speed) {}
 };
 
