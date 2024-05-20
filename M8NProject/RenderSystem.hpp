@@ -1,23 +1,21 @@
 #pragma once
 
-#include <SDL.h>
-#include <SDL_ttf.h>
+#include "Entity.hpp"
 
-#include "ECS.hpp"
-#include "Game.hpp"
-#include "Camera.hpp"
-#include "Entities.hpp"
-#include "Managers.hpp"
+class Manager;
 
-class RenderSystem : public System
+class RenderSystem
 {
 private:
-	TTF_Font* font = nullptr;
+	Manager& manager;
 public:
-	RenderSystem(Manager& manager);
-	~RenderSystem() {}
+	bool active = true;
 
-	void update(std::vector<std::unique_ptr<Entity>>& entities) override;
-	void renderPlayerInterface(std::unique_ptr<Entity>& entity);
-	void renderAnimations(std::unique_ptr<Entity>& entity, RenderComponent& render);
+	RenderSystem(Manager& mManager) : manager(mManager) {}
+	virtual ~RenderSystem() {}
+
+	bool isActive() const { return active; }
+	void destroy() { active = false; }
+
+	virtual void render(std::vector<std::unique_ptr<Entity>>& entities) {};
 };

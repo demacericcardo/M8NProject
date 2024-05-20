@@ -12,7 +12,7 @@ void AISystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 
 	for (auto& entity : entities)
 	{
-		Bot* botEntity = dynamic_cast<Bot*>(entity.get());
+		Unit* botEntity = dynamic_cast<Unit*>(entity.get());
 
 		if (botEntity && botEntity->hasComponent<TransformComponent>())
 		{
@@ -64,7 +64,8 @@ void AISystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 				if (distance > botEntity->stopDistance)
 				{
 					direction = direction.normalize();
-					transformComponent.position += Vector2D(static_cast<int>(direction.x * botEntity->speed), static_cast<int>(direction.y * botEntity->speed));
+					//TODO non se move un cazzo dio ladruncolo
+					transformComponent.position += Vector2D(static_cast<int>(direction.x * botEntity->speed * Game::frameLength), static_cast<int>(direction.y * botEntity->speed * Game::frameLength));
 				}
 				else
 				{

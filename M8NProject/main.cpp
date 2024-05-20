@@ -5,10 +5,12 @@ Game* game = nullptr;
 int main(int argc, char* argv[])
 {
 	const int FPS = 60;
-	const int maxFrameLenght = 1000 / FPS;
+	const float frameLength = 1.0f / FPS;
+	float accumulator = 0.0f;
+	float interpolation = 0.0f;
 
-	Uint32 frameStart;
-	int frameLength;
+	Uint32 currentTime = SDL_GetTicks();
+	Uint32 previousTime;
 
 	game = new Game();
 
@@ -16,15 +18,24 @@ int main(int argc, char* argv[])
 
 	while (game->running())
 	{
-		frameStart = SDL_GetTicks();
-		
-		game->handleEvents();
-		game->update();
+		previousTime = currentTime;
+		currentTime = SDL_GetTicks();
 
-		frameLength = SDL_GetTicks() - frameStart;
+		float deltaTime = (currentTime - previousTime) / 1000.0f;
 
-		if (maxFrameLenght > frameLength)
-			SDL_Delay(maxFrameLenght - frameLength);
+		accumulator += deltaTime;
+
+		while (accumulator >= frameLength)
+		{
+			game->handleEvents();
+			game->update(frameLength);
+
+			accumulator -= frameLength;
+		}
+
+		interpolation = accumulator / frameLength;
+
+		game->render(interpolation);
 	}
 
 	game->clean();

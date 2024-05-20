@@ -46,9 +46,8 @@ void PlayerMovementSystem::update(std::vector<std::unique_ptr<Entity>>& entities
 			}
 
 			transform.previousPosition = transform.position;
-			transform.position.x += transform.velocity.x * static_cast<float>(transform.speed);
-			transform.position.y += transform.velocity.y * static_cast<float>(transform.speed);
-
+			transform.position.x += transform.velocity.x * playerEntity->speed * Game::frameLength;
+			transform.position.y += transform.velocity.y * playerEntity->speed * Game::frameLength;
 		}
 	}
 }

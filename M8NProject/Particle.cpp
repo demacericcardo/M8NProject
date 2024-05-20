@@ -2,8 +2,8 @@
 #include "Game.hpp"
 
 void Particle::update() {
-	position += velocity * Game::deltaTime;
-	remainingLifeSpan -= Game::deltaTime;
+	position += velocity * Game::frameLength;
+	remainingLifeSpan -= Game::frameLength;
 }
 
 bool Particle::isDead() const {

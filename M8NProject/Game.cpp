@@ -5,6 +5,7 @@
 #include "Managers.hpp"
 #include "Entities.hpp"
 #include "Systems.hpp"
+#include "RenderSystems.hpp"
 #include "Camera.hpp"
 #include "Input.hpp"
 #include "ParticleEmitter.hpp"
@@ -14,7 +15,8 @@ Manager manager;
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 
-float Game::deltaTime = 0.0f;
+float Game::frameLength = 0.0f;
+float Game::interpolation = 0.0f;
 
 Game::Game() : isRunning(false), window(nullptr) {}
 Game::~Game() {}
@@ -46,10 +48,10 @@ void Game::init(const char* title, bool fullscreen)
 	Rock& rock = manager.addEntity<Rock>(manager);
 	Player& player = manager.addEntity<Player>(manager);
 
-	Bot& bot1 = manager.addEntity<Bot>(manager, player.transform, 150.0f, 150.0f);
-	Bot& bot2 = manager.addEntity<Bot>(manager, player.transform, 200.0f, 250.0f);
-	Bot& bot3 = manager.addEntity<Bot>(manager, player.transform, 300.0f, 350.0f);
-	Bot& bot4 = manager.addEntity<Bot>(manager, player.transform, 50.0f, 550.0f);
+	Unit& bot1 = manager.addEntity<Unit>(manager, 150.0f, 150.0f);
+	Unit& bot2 = manager.addEntity<Unit>(manager, 200.0f, 250.0f);
+	Unit& bot3 = manager.addEntity<Unit>(manager, 300.0f, 350.0f);
+	Unit& bot4 = manager.addEntity<Unit>(manager, 50.0f, 550.0f);
 
 	initSystems();
 
@@ -72,10 +74,8 @@ void Game::renderTiles() {
 	}
 }
 
-
 void Game::initSystems()
 {
-	manager.addSystem<RenderSystem>(manager);
 	manager.addSystem<InputSystem>(manager);
 	manager.addSystem<CollisionSystem>(manager);
 	manager.addSystem<AISystem>(manager);
@@ -83,6 +83,9 @@ void Game::initSystems()
 	manager.addSystem<PlayerInteractionSystem>(manager);
 	manager.addSystem<UnitsMovementSystem>(manager);
 	manager.addSystem<StateAnimationSystem>(manager);
+	manager.addSystem<AnimationSystem>(manager);
+
+	manager.addRenderSystem<BaseRenderSystem>(manager);
 }
 
 void Game::handleEvents()
@@ -104,35 +107,32 @@ void Game::handleEvents()
 	input.mouseState = SDL_GetMouseState(&input.mouseXPos, &input.mouseYPos);
 }
 
-void Game::update() {
+void Game::update(float frameLenght) {
 
-	Uint32 start_time = SDL_GetTicks();
-
+	Game::frameLength = frameLenght;
 	manager.refresh();
-
-	SDL_RenderClear(Game::renderer);
-
+	manager.update();
 	Camera::getInstance().update();
+}
+
+void Game::render(float interpolation)
+{
+	Game::interpolation = interpolation;
+	SDL_RenderClear(renderer);
 
 	renderTiles();
-
 	ParticleEmitter::getInstance().update();
 
-	manager.update();
+	manager.render();
 
-	/*
 	Input& input = Input::getInstance();
 
 	SDL_Rect cursorRect = { input.mouseXPos, input.mouseYPos, 32, 32 };
 	SDL_Rect srcRect = { 0, 0, 32, 32 };
 
 	SDL_RenderCopy(Game::renderer, AssetManager::getInstance().getTexture("cursor"), &srcRect, &cursorRect);
-	*/
 
-	SDL_RenderPresent(Game::renderer);
-
-	Uint32 end_time = SDL_GetTicks();
-	Game::deltaTime = (end_time - start_time) / 1000.0f;
+	SDL_RenderPresent(renderer);
 }
 
 void Game::clean()

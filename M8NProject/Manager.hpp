@@ -17,6 +17,7 @@ class Manager
 private:
 	std::vector<std::unique_ptr<Entity>> entities;
 	std::vector<std::unique_ptr<System>> systems;
+	std::vector<std::unique_ptr<RenderSystem>> renderSystems;
 
 public:
 	void update()
@@ -24,6 +25,14 @@ public:
 		for (auto& s : systems)
 		{
 			s->update(entities);
+		}
+	}
+
+	void render()
+	{
+		for (auto& rs : renderSystems)
+		{
+			rs->render(entities);
 		}
 	}
 
@@ -42,6 +51,13 @@ public:
 				return !mSystem->isActive();
 			}),
 			std::end(systems));
+
+		renderSystems.erase(std::remove_if(std::begin(renderSystems), std::end(renderSystems),
+			[](const std::unique_ptr<RenderSystem>& mRenderSystem)
+			{
+				return !mRenderSystem->isActive();
+			}),
+			std::end(renderSystems));
 	}
 
 	template <typename T, typename... TArgs>
@@ -63,6 +79,17 @@ public:
 		auto uPtr = std::make_unique<T>(std::forward<TArgs>(args)...);
 		auto* e = uPtr.get();
 		systems.emplace_back(std::move(uPtr));
+		return *e;
+	}
+
+	template <typename T, typename... TArgs>
+	T& addRenderSystem(TArgs&&... args)
+	{
+		static_assert(std::is_base_of<RenderSystem, T>::value, "T must be a derived class of RenderSystem");
+
+		auto uPtr = std::make_unique<T>(std::forward<TArgs>(args)...);
+		auto* e = uPtr.get();
+		renderSystems.emplace_back(std::move(uPtr));
 		return *e;
 	}
 };

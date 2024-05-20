@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RenderSystem.hpp"
+#include "BaseRenderSystem.hpp"
 #include "InputSystem.hpp"
 #include "CollisionSystem.hpp"
 #include "AISystem.hpp"
@@ -8,3 +8,4 @@
 #include "PlayerInteractionSystem.hpp"
 #include "UnitsMovementSystem.hpp"
 #include "StateAnimationSystem.hpp"
+#include "AnimationSystem.hpp"

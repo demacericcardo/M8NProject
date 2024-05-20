@@ -1,9 +1,9 @@
 #pragma once
 
-#include "RenderSystem.hpp"
+#include "BaseRenderSystem.hpp"
 #include "Input.hpp"
 
-RenderSystem::RenderSystem(Manager& manager) : System(manager)
+BaseRenderSystem::BaseRenderSystem(Manager& manager) : RenderSystem(manager)
 {
 	if (TTF_Init() == -1) {
 		printf("TTF_Init: %s\n", TTF_GetError());
@@ -16,7 +16,7 @@ RenderSystem::RenderSystem(Manager& manager) : System(manager)
 	}
 }
 
-void RenderSystem::update(std::vector<std::unique_ptr<Entity>>& entities)
+void BaseRenderSystem::render(std::vector<std::unique_ptr<Entity>>& entities)
 {
 	Vector2D cameraPos = Camera::getInstance().getPosition();
 
@@ -38,12 +38,13 @@ void RenderSystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 			render.srcRect.w = render.width;
 			render.srcRect.h = render.height;
 
-			render.destRect.x = static_cast<int>(transform.position.x - cameraPos.x);
-			render.destRect.y = static_cast<int>(transform.position.y - cameraPos.y);
+			Vector2D interpolatedPosition = transform.previousPosition + (transform.position - transform.previousPosition) * Game::interpolation;
+
+			render.destRect.x = static_cast<int>(interpolatedPosition.x - cameraPos.x);
+			render.destRect.y = static_cast<int>(interpolatedPosition.y - cameraPos.y);
+			
 			render.destRect.w = render.width * render.scale;
 			render.destRect.h = render.height * render.scale;
-
-			renderAnimations(entity, render);
 
 			SDL_RendererFlip flip = render.isFlipped ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 			SDL_RenderCopyEx(Game::renderer, AssetManager::getInstance().getTexture(render.getTextureID()), &render.srcRect, &render.destRect, 0, NULL, flip);
@@ -53,20 +54,7 @@ void RenderSystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 	}
 }
 
-void RenderSystem::renderAnimations(std::unique_ptr<Entity>& entity, RenderComponent& render)
-{
-	if (entity->hasComponent<AnimationComponent>())
-	{
-		AnimationComponent& animation = entity->getComponent<AnimationComponent>();
-
-		if (animation.getAnimation()) {
-			render.srcRect.y = animation.getAnimation()->index * render.height;
-			render.srcRect.x = render.srcRect.w * static_cast<int>((SDL_GetTicks() / animation.getAnimation()->speed) % animation.getAnimation()->frames);
-		}
-	}
-}
-
-void RenderSystem::renderPlayerInterface(std::unique_ptr<Entity>& entity)
+void BaseRenderSystem::renderPlayerInterface(std::unique_ptr<Entity>& entity)
 {
 	Player* playerEntity = dynamic_cast<Player*>(entity.get());
 
@@ -89,14 +77,14 @@ void RenderSystem::renderPlayerInterface(std::unique_ptr<Entity>& entity)
 		Input& input = Input::getInstance();
 
 		if (input.mousePosClicked) {
-			SDL_Rect rect{};
-			rect.x = static_cast<int>(input.mousePosClicked->x);
-			rect.y = static_cast<int>(input.mousePosClicked->y);
-			rect.w = input.mouseXPos - static_cast<int>(input.mousePosClicked->x);
-			rect.h = input.mouseYPos - static_cast<int>(input.mousePosClicked->y);
+			SDL_Rect destRect{};
+			destRect.x = static_cast<int>(input.mousePosClicked->x);
+			destRect.y = static_cast<int>(input.mousePosClicked->y);
+			destRect.w = input.mouseXPos - static_cast<int>(input.mousePosClicked->x);
+			destRect.h = input.mouseYPos - static_cast<int>(input.mousePosClicked->y);
 
 			SDL_SetRenderDrawColor(Game::renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-			SDL_RenderDrawRect(Game::renderer, &rect);
+			SDL_RenderDrawRect(Game::renderer, &destRect);
 			SDL_SetRenderDrawColor(Game::renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
 		}
 	}

@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="AISystem.cpp" />
     <ClCompile Include="AnimationManager.cpp" />
+    <ClCompile Include="AnimationSystem.cpp" />
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionSystem.cpp" />
@@ -140,7 +141,7 @@
     <ClCompile Include="ParticleEmitter.cpp" />
     <ClCompile Include="PlayerInteractionSystem.cpp" />
     <ClCompile Include="PlayerMovementSystem.cpp" />
-    <ClCompile Include="RenderSystem.cpp" />
+    <ClCompile Include="BaseRenderSystem.cpp" />
     <ClCompile Include="StateAnimationSystem.cpp" />
     <ClCompile Include="UnitsMovementSystem.cpp" />
     <ClCompile Include="Vector2D.cpp" />
@@ -154,7 +155,8 @@
     <ClInclude Include="Animation.hpp" />
     <ClInclude Include="AnimationComponent.hpp" />
     <ClInclude Include="AnimationManager.hpp" />
-    <ClInclude Include="Bot.hpp" />
+    <ClInclude Include="AnimationSystem.hpp" />
+    <ClInclude Include="Unit.hpp" />
     <ClInclude Include="Camera.hpp" />
     <ClInclude Include="ColliderComponent.hpp" />
     <ClInclude Include="CollisionSystem.hpp" />
@@ -176,7 +178,9 @@
     <ClInclude Include="PlayerInteractionSystem.hpp" />
     <ClInclude Include="PlayerMovementSystem.hpp" />
     <ClInclude Include="RenderComponent.hpp" />
+    <ClInclude Include="BaseRenderSystem.hpp" />
     <ClInclude Include="RenderSystem.hpp" />
+    <ClInclude Include="RenderSystems.hpp" />
     <ClInclude Include="Rock.hpp" />
     <ClInclude Include="StateAnimationSystem.hpp" />
     <ClInclude Include="StateComponent.hpp" />

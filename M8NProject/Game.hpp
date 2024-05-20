@@ -20,7 +20,8 @@ public:
 	void renderTiles();
 	void initSystems();
 	void handleEvents();
-	void update();
+	void update(float deltaTime);
+	void render(float interpolation);
 	void clean();
 	void loadTextures();
 	void loadAnimations();
@@ -30,7 +31,8 @@ public:
 	static const int SCREEN_WIDTH = 1280;
 	static const int SCREEN_HEIGHT = 720;
 
-	static float deltaTime;
+	static float frameLength;
+	static float interpolation;
 
 	static SDL_Renderer* renderer;
 	static SDL_Event event;

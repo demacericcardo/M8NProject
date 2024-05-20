@@ -6,6 +6,7 @@
 class Player : public Entity
 {
 public:
+	float speed = 50.0f;
 	int minerals = 0;
 
 	TransformComponent* transform;

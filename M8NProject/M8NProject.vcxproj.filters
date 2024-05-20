@@ -55,6 +55,12 @@
     <Filter Include="Source Files\Utils">
       <UniqueIdentifier>{105c4c15-1776-4b97-8f76-0d652b6684fa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ECS\RenderSystems">
+      <UniqueIdentifier>{055b4836-12d5-4fda-9f93-ffc9ecc1df81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ECS\RenderSystems">
+      <UniqueIdentifier>{8b4a200b-d8d1-418c-a231-6ed6e11c230e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -73,9 +79,6 @@
       <Filter>Source Files\ECS\Systems</Filter>
     </ClCompile>
     <ClCompile Include="InputSystem.cpp">
-      <Filter>Source Files\ECS\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderSystem.cpp">
       <Filter>Source Files\ECS\Systems</Filter>
     </ClCompile>
     <ClCompile Include="PlayerInteractionSystem.cpp">
@@ -104,6 +107,12 @@
     </ClCompile>
     <ClCompile Include="ParticleEmitter.cpp">
       <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationSystem.cpp">
+      <Filter>Source Files\ECS\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseRenderSystem.cpp">
+      <Filter>Source Files\ECS\RenderSystems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -136,9 +145,6 @@
     </ClInclude>
     <ClInclude Include="System.hpp">
       <Filter>Header Files\ECS\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderSystem.hpp">
-      <Filter>Header Files\ECS\Systems</Filter>
     </ClInclude>
     <ClInclude Include="Player.hpp">
       <Filter>Header Files\ECS\Entities</Filter>
@@ -179,7 +185,7 @@
     <ClInclude Include="CollisionSystem.hpp">
       <Filter>Header Files\ECS\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="Bot.hpp">
+    <ClInclude Include="Unit.hpp">
       <Filter>Header Files\ECS\Entities</Filter>
     </ClInclude>
     <ClInclude Include="AISystem.hpp">
@@ -214,6 +220,18 @@
     </ClInclude>
     <ClInclude Include="Input.hpp">
       <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderSystem.hpp">
+      <Filter>Header Files\ECS\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationSystem.hpp">
+      <Filter>Header Files\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseRenderSystem.hpp">
+      <Filter>Header Files\ECS\RenderSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderSystems.hpp">
+      <Filter>Header Files\ECS\RenderSystems</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
