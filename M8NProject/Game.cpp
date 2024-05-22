@@ -48,7 +48,7 @@ void Game::init(const char* title, bool fullscreen)
 	Rock& rock = manager.addEntity<Rock>(manager);
 	Player& player = manager.addEntity<Player>(manager);
 
-	Unit& bot1 = manager.addEntity<Unit>(manager, 150.0f, 150.0f);
+	Unit& bot1 = manager.addEntity<Unit>(manager, 0.0f, 0.0f);
 	Unit& bot2 = manager.addEntity<Unit>(manager, 200.0f, 250.0f);
 	Unit& bot3 = manager.addEntity<Unit>(manager, 300.0f, 350.0f);
 	Unit& bot4 = manager.addEntity<Unit>(manager, 50.0f, 550.0f);
@@ -60,16 +60,21 @@ void Game::init(const char* title, bool fullscreen)
 }
 
 void Game::renderTiles() {
-	int startTileX = Camera::getInstance().getPosition().x / 32 - 2;
-	int startTileY = Camera::getInstance().getPosition().y / 32 - 2;
-	int endTileX = startTileX + (Game::SCREEN_WIDTH / 32) + 2;
-	int endTileY = startTileY + (Game::SCREEN_HEIGHT / 32) + 2;
+	Camera& camera = Camera::getInstance();
+	SDL_Texture* groundTexture = AssetManager::getInstance().getTexture("ground");
 
-	for (int y = startTileY; y < endTileY; y++) {
-		for (int x = startTileX; x < endTileX; x++) {
-			//Tile& tile = map.getTile(x, y);
-			SDL_Rect destRect = { (x * 32) - Camera::getInstance().getPosition().x, (y * 32) - Camera::getInstance().getPosition().y, 32, 32 };
-			SDL_RenderCopy(Game::renderer, AssetManager::getInstance().getTexture("ground"), NULL, &destRect);
+	int startTileX = (static_cast<int>(camera.getPosition().x) / Game::TILE_SIZE) - Game::TILE_SIZE;
+	int startTileY = (static_cast<int>(camera.getPosition().y) / Game::TILE_SIZE) - Game::TILE_SIZE;
+	int endTileX = startTileX + (Game::SCREEN_WIDTH / Game::TILE_SIZE) + (Game::TILE_SIZE * 2);
+	int endTileY = startTileY + (Game::SCREEN_HEIGHT / Game::TILE_SIZE) + (Game::TILE_SIZE * 2);
+
+	int initialX = startTileX * Game::TILE_SIZE - static_cast<int>(camera.getPosition().x);
+	int initialY = startTileY * Game::TILE_SIZE - static_cast<int>(camera.getPosition().y);
+
+	for (int y = startTileY, destY = initialY; y < endTileY; y++, destY += Game::TILE_SIZE) {
+		for (int x = startTileX, destX = initialX; x < endTileX; x++, destX += Game::TILE_SIZE) {
+			SDL_Rect destRect = { destX, destY, Game::TILE_SIZE, Game::TILE_SIZE };
+			SDL_RenderCopy(Game::renderer, groundTexture, NULL, &destRect);
 		}
 	}
 }
@@ -104,6 +109,10 @@ void Game::handleEvents()
 
 	Input& input = Input::getInstance();
 	input.currentKeyStates = SDL_GetKeyboardState(NULL);
+
+	if (input.currentKeyStates[SDL_SCANCODE_ESCAPE])
+		isRunning = false;
+
 	input.mouseState = SDL_GetMouseState(&input.mouseXPos, &input.mouseYPos);
 }
 
@@ -171,6 +180,7 @@ void Game::loadTextures()
 		{"bot", "assets/bot.png"},
 		{"botSelected", "assets/botSelected.png"},
 		{"walkParticle", "assets/walkParticle.png"},
+		{"selectionParticle", "assets/selectionParticle.png"},
 		{ "cursor", "assets/cursor.png" },
 		{ "ground", "assets/ground.png" }
 	};
