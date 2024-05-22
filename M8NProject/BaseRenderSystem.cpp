@@ -34,19 +34,22 @@ void BaseRenderSystem::render(std::vector<std::unique_ptr<Entity>>& entities)
 			RenderComponent& render = entity->getComponent<RenderComponent>();
 			const TransformComponent& transform = entity->getComponent<TransformComponent>();
 
-			render.srcRect.x = render.srcRect.y = 0;
-			render.srcRect.w = render.width;
-			render.srcRect.h = render.height;
-
-			Vector2D interpolatedPosition = transform.previousPosition + (transform.position - transform.previousPosition) * Game::interpolation;
+			Vector2D interpolatedPosition;
+			if (transform.previousPosition) {
+				interpolatedPosition = *transform.previousPosition + (transform.position - *transform.previousPosition) * Game::interpolation;
+			}
+			else {
+				interpolatedPosition = transform.position;
+			}
 
 			render.destRect.x = static_cast<int>(interpolatedPosition.x - cameraPos.x);
 			render.destRect.y = static_cast<int>(interpolatedPosition.y - cameraPos.y);
-			
+
 			render.destRect.w = render.width * render.scale;
 			render.destRect.h = render.height * render.scale;
 
 			SDL_RendererFlip flip = render.isFlipped ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+
 			SDL_RenderCopyEx(Game::renderer, AssetManager::getInstance().getTexture(render.getTextureID()), &render.srcRect, &render.destRect, 0, NULL, flip);
 		}
 

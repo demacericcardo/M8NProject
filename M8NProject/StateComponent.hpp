@@ -6,10 +6,16 @@
 class StateComponent : public Component
 {
 private:
+	PlayerState previousState;
 	PlayerState state;
 public:
-	StateComponent(PlayerState initialState) :state(initialState) {}
+	StateComponent(PlayerState initialState) :state(initialState), previousState(initialState) {}
 
 	PlayerState getState() const { return state; }
-	void setState(PlayerState newState) { state = newState; }
+	bool hasStateChanged() const { return state != previousState; }
+	void setState(PlayerState newState)
+	{
+		previousState = state;
+		state = newState;
+	}
 };

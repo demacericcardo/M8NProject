@@ -11,6 +11,8 @@ class AnimationComponent : public Component
 private:
 	Animation* currentAnimation = nullptr;
 public:
+	Uint32 lastUpdate = 0;
+	int frameCounter = 0;
 
 	AnimationComponent() { }
 	AnimationComponent(std::string animationName) { currentAnimation = AnimationManager::getInstance().getAnimation(animationName); }

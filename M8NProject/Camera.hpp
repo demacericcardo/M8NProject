@@ -11,7 +11,7 @@ private:
 	Vector2D position;
 	TransformComponent* target;
 
-	float cameraSpeed = 0.25f;
+	float cameraSpeed = 20.0f;
 
 	Camera() : target(nullptr) {}
 public:

@@ -32,8 +32,8 @@ void CollisionSystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 						{
 							Player* playerEntity = dynamic_cast<Player*>(entity1.get());
 
-							if (collidesWith(playerCollider, colliderBlock))
-								playerEntity->transform->position = playerEntity->transform->previousPosition;
+							if (collidesWith(playerCollider, colliderBlock) && playerEntity->transform->previousPosition)
+								playerEntity->transform->position = *playerEntity->transform->previousPosition;
 
 							if (collidesWith(playerCollider, colliderInteractable))
 								playerEntity->interactableEntity = entity2.get();

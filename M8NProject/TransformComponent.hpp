@@ -1,11 +1,12 @@
 #pragma once
 #include "Vector2D.hpp"
 #include "ECS.hpp"
+#include <optional>
 
 class TransformComponent : public Component
 {
 public:
-	Vector2D previousPosition;
+	std::optional<Vector2D> previousPosition;
 	Vector2D position;
 
 	Vector2D velocity;

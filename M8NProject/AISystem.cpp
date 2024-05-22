@@ -43,7 +43,7 @@ void AISystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 
 			if (input.mouseRightClick && unitEntity->isSelected)
 			{
-				ParticleEmitter::getInstance().emitParticle("walkParticle", { static_cast<float>(input.mouseXPos) + cameraPos.x, static_cast<float>(input.mouseYPos) + cameraPos.y }, Vector2D(0, 0), 0.025f);
+				ParticleEmitter::getInstance().emitParticle("walkParticle", { static_cast<float>(input.mouseXPos) + cameraPos.x, static_cast<float>(input.mouseYPos) + cameraPos.y }, Vector2D(0, 0), 20.0f);
 
 				if (unitEntity->currentDestination)
 				{

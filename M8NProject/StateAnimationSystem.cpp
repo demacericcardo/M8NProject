@@ -18,6 +18,9 @@ void StateAnimationSystem::setPlayerAnimation(std::unique_ptr<Entity>& entity)
 
 	if (playerEntity)
 	{
+		if (playerEntity->state->hasStateChanged())
+			playerEntity->animation->frameCounter = 0;
+
 		switch (playerEntity->state->getState())
 		{
 		case PlayerState::IDLE:

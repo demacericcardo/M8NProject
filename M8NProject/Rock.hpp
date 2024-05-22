@@ -29,7 +29,7 @@ public:
 	void takeMineral() {
 		minerals--;
 		if (minerals <= 0) {
-			ParticleEmitter::getInstance().emitParticle("walkParticle", transform->position, Vector2D(0, 0), 0.025f);
+			ParticleEmitter::getInstance().emitParticle("walkParticle", transform->position, Vector2D(0, 0), 2.0f);
 			destroy();
 		}
 	}
