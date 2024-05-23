@@ -202,8 +202,9 @@ void Game::loadAnimations()
 {
 	std::vector<std::tuple<std::string, int, int, int>> animations = {
 		{"playerIdle", 0, 2, 200.0f},
-		{"playerWalk", 1, 4, 150.0f},
-		{"botIdle", 0, 2, 200.0f}
+		{"playerWalk", 3, 4, 150.0f},
+		{"unitIdle", 0, 4, 200.0f},
+		{"unitWalk", 2, 4, 200.0f}
 	};
 
 	for (const auto& animation : animations)

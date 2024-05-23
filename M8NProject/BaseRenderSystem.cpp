@@ -48,7 +48,7 @@ void BaseRenderSystem::render(std::vector<std::unique_ptr<Entity>>& entities)
 			render.destRect.w = render.width * render.scale;
 			render.destRect.h = render.height * render.scale;
 
-			SDL_RendererFlip flip = render.isFlipped ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+			SDL_RendererFlip flip = render.isNotFlipped ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
 
 			SDL_RenderCopyEx(Game::renderer, AssetManager::getInstance().getTexture(render.getTextureID()), &render.srcRect, &render.destRect, 0, NULL, flip);
 		}

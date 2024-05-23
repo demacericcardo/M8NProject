@@ -69,10 +69,12 @@ void AISystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 				{
 					direction = direction.normalize();
 					transformComponent.position += Vector2D(direction.x * unitEntity->speed * Game::frameLength, direction.y * unitEntity->speed * Game::frameLength);
+					unitEntity->state->setState(UnitState::WALK);
 				}
 				else
 				{
 					unitEntity->currentDestination.reset();
+					unitEntity->state->setState(UnitState::IDLE);
 				}
 			}
 		}

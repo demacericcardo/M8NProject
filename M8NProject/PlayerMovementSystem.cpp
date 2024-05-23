@@ -14,7 +14,7 @@ void PlayerMovementSystem::update(std::vector<std::unique_ptr<Entity>>& entities
 		if (playerEntity)
 		{
 			TransformComponent& transform = playerEntity->getComponent<TransformComponent>();
-			StateComponent& state = playerEntity->getComponent<StateComponent>();
+			StateComponent<PlayerState>& state = playerEntity->getComponent < StateComponent<PlayerState>>();
 			RenderComponent& render = playerEntity->getComponent<RenderComponent>();
 
 			if (input.up == input.down)
@@ -34,11 +34,14 @@ void PlayerMovementSystem::update(std::vector<std::unique_ptr<Entity>>& entities
 			if (transform.velocity.x != 0 || transform.velocity.y != 0)
 			{
 				transform.velocity = transform.velocity.normalize();
-				render.isFlipped = transform.velocity.x > 0;
+				render.isNotFlipped = transform.velocity.x > 0;
 
 				state.setState(PlayerState::WALK);
 				if (!ParticleEmitter::getInstance().hasParticleByTextureID("walkParticle"))
-					ParticleEmitter::getInstance().emitParticle("walkParticle", transform.position, Vector2D(0, 0), 2.0f);
+				{
+					Vector2D positionOffset = { transform.position.x + 16.0f, transform.position.y + 32.0f };
+					ParticleEmitter::getInstance().emitParticle("walkParticle", positionOffset, Vector2D(0, 0), 5.0f);
+				}
 			}
 			else
 			{

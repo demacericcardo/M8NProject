@@ -5,7 +5,7 @@ enum class PlayerState {
 	WALK
 };
 
-enum class BotState {
+enum class UnitState {
 	IDLE,
 	WALK
 };

@@ -3,19 +3,20 @@
 #include "ECS.hpp"
 #include "Enums.hpp"
 
+template <typename EnumType>
 class StateComponent : public Component
 {
 private:
-	PlayerState previousState;
-	PlayerState state;
+    EnumType previousState;
+    EnumType state;
 public:
-	StateComponent(PlayerState initialState) :state(initialState), previousState(initialState) {}
+    StateComponent(EnumType initialState) :state(initialState), previousState(initialState) {}
 
-	PlayerState getState() const { return state; }
-	bool hasStateChanged() const { return state != previousState; }
-	void setState(PlayerState newState)
-	{
-		previousState = state;
-		state = newState;
-	}
+    EnumType getState() const { return state; }
+    bool hasStateChanged() const { return state != previousState; }
+    void setState(EnumType newState)
+    {
+        previousState = state;
+        state = newState;
+    }
 };

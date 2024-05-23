@@ -9,5 +9,6 @@ public:
 	~StateAnimationSystem() {}
 
 	void update(std::vector<std::unique_ptr<Entity>>& entities) override;
+	void setUnitAnimation(std::unique_ptr<Entity>& entity);
 	void setPlayerAnimation(std::unique_ptr<Entity>& entity);
 };
