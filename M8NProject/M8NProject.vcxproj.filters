@@ -233,5 +233,8 @@
     <ClInclude Include="RenderSystems.hpp">
       <Filter>Header Files\ECS\RenderSystems</Filter>
     </ClInclude>
+    <ClInclude Include="MainBase.hpp">
+      <Filter>Header Files\ECS\Entities</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

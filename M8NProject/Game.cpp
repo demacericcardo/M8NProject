@@ -53,6 +53,8 @@ void Game::init(const char* title, bool fullscreen)
 	Unit& bot3 = manager.addEntity<Unit>(manager, 300.0f, 350.0f);
 	Unit& bot4 = manager.addEntity<Unit>(manager, 50.0f, 550.0f);
 
+	MainBase& mainBase = manager.addEntity<MainBase>(manager);
+
 	initSystems();
 
 	Camera::getInstance().setTarget(player.getComponent<TransformComponent>());
@@ -61,7 +63,7 @@ void Game::init(const char* title, bool fullscreen)
 
 void Game::renderTiles() {
 	Camera& camera = Camera::getInstance();
-	SDL_Texture* groundTexture = AssetManager::getInstance().getTexture("ground");
+	SDL_Texture* groundTexture = AssetManager::getInstance().getTexture("ambient");
 
 	int startTileX = (static_cast<int>(camera.getPosition().x) / Game::TILE_SIZE) - Game::TILE_SIZE;
 	int startTileY = (static_cast<int>(camera.getPosition().y) / Game::TILE_SIZE) - Game::TILE_SIZE;
@@ -73,8 +75,9 @@ void Game::renderTiles() {
 
 	for (int y = startTileY, destY = initialY; y < endTileY; y++, destY += Game::TILE_SIZE) {
 		for (int x = startTileX, destX = initialX; x < endTileX; x++, destX += Game::TILE_SIZE) {
+			SDL_Rect srcRect = { 56, 40, Game::TILE_SIZE, Game::TILE_SIZE };
 			SDL_Rect destRect = { destX, destY, Game::TILE_SIZE, Game::TILE_SIZE };
-			SDL_RenderCopy(Game::renderer, groundTexture, NULL, &destRect);
+			SDL_RenderCopy(Game::renderer, groundTexture, &srcRect, &destRect);
 		}
 	}
 }
@@ -175,14 +178,13 @@ void Game::loadTextures()
 {
 	std::vector<std::pair<std::string, std::string>> textures = {
 		{"playerTexture", "assets/character.png"},
-		{"trigger", "assets/trigger.png"},
 		{"rockTexture", "assets/dirt.png"},
 		{"bot", "assets/bot.png"},
 		{"botSelected", "assets/botSelected.png"},
 		{"walkParticle", "assets/walkParticle.png"},
 		{"selectionParticle", "assets/selectionParticle.png"},
 		{ "cursor", "assets/cursor.png" },
-		{ "ground", "assets/ground.png" }
+		{ "ambient", "assets/ambient.png"}
 	};
 
 	for (const auto& texture : textures)

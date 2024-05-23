@@ -21,17 +21,14 @@ public:
 
 	bool isFlipped = false;
 
-	RenderComponent(std::string texId)
-		: textureID(texId) {}
+	RenderComponent(std::string textureID)
+		: textureID(textureID) {}
 
-	RenderComponent(std::string texId, int index)
-		: textureID(texId), zIndex(index) {}
+	RenderComponent(std::string textureID, SDL_Rect srcRect)
+		: textureID(textureID), srcRect(srcRect) {}
 
-	RenderComponent(std::string texId, SDL_Rect srcR, SDL_Rect destR)
-		: textureID(texId), srcRect(srcR), destRect(destR) {}
-
-	RenderComponent(std::string texId, SDL_Rect srcR, SDL_Rect destR, int h, int w, int s)
-		: textureID(texId), srcRect(srcR), destRect(destR), height(h), width(w), scale(s) {}
+	RenderComponent(std::string textureID, SDL_Rect srcRect, int scale)
+		: textureID(textureID), srcRect(srcRect), width(srcRect.w), height(srcRect.h), scale(scale) {}
 
 	void setTextureId(std::string textureId) { textureID = textureId; }
 	std::string getTextureID() { return textureID; }

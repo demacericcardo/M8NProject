@@ -30,7 +30,11 @@ void AISystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 
 				SDL_Rect rect = { minX, minY, maxX - minX, maxY - minY };
 
-				if (SDL_PointInRect(&botPosition, &rect))
+				SDL_Rect unitCollider = unitEntity->collider->collider;
+				unitCollider.x -= static_cast<int>(cameraPos.x);
+				unitCollider.y -= static_cast<int>(cameraPos.y);
+
+				if (SDL_HasIntersection(&rect, &unitCollider))
 					unitEntity->isSelected = true;
 				else
 					unitEntity->isSelected = false;
@@ -61,7 +65,7 @@ void AISystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 				Vector2D direction = *unitEntity->currentDestination - transformComponent.position;
 				float distance = direction.magnitude();
 
-				if (distance > 5.0f)
+				if (distance > 10.0f)
 				{
 					direction = direction.normalize();
 					transformComponent.position += Vector2D(direction.x * unitEntity->speed * Game::frameLength, direction.y * unitEntity->speed * Game::frameLength);

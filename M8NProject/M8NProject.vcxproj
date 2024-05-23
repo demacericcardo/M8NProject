@@ -156,6 +156,7 @@
     <ClInclude Include="AnimationComponent.hpp" />
     <ClInclude Include="AnimationManager.hpp" />
     <ClInclude Include="AnimationSystem.hpp" />
+    <ClInclude Include="MainBase.hpp" />
     <ClInclude Include="Unit.hpp" />
     <ClInclude Include="Camera.hpp" />
     <ClInclude Include="ColliderComponent.hpp" />

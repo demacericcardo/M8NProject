@@ -21,7 +21,10 @@ public:
 	Player(Manager& manager) : Entity(manager)
 	{
 		transform = &addComponent<TransformComponent>(200.0f, 200.0f);
-		sprite = &addComponent<RenderComponent>("playerTexture", 100);
+
+		sprite = &addComponent<RenderComponent>("playerTexture");
+		sprite->zIndex = 100;
+
 		state = &addComponent<StateComponent>(PlayerState::IDLE);
 		animation = &addComponent<AnimationComponent>("playerIdle");
 		collider = &addComponent<ColliderComponent>(static_cast<int>(transform->position.x), static_cast<int>(transform->position.y), sprite->width, sprite->height, "player");

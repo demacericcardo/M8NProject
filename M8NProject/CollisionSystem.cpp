@@ -14,55 +14,19 @@ void CollisionSystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 			collider1.collider.x = static_cast<int>(transform1.position.x);
 			collider1.collider.y = static_cast<int>(transform1.position.y);
 
+			Player* playerEntity = dynamic_cast<Player*>(entity1.get());
+			Unit* unitEntity = dynamic_cast<Unit*>(entity1.get());
+
 			for (auto& entity2 : entities)
 			{
 				if (entity1 != entity2 && entity2->hasComponent<ColliderComponent>())
 				{
-					Player* playerEntity = dynamic_cast<Player*>(entity1.get());
-
 					if (playerEntity)
-						checkPlayerCollision(entity2, collider1, playerEntity);
-
-					Unit* unitEntity = dynamic_cast<Unit*>(entity1.get());
+						checkPlayerCollisions(entity2, collider1, playerEntity);
 
 					if (unitEntity)
 					{
-						if (entity2->hasColliderComponent("selectableUnit"))
-						{
-							ColliderComponent& colliderAnotherUnit = entity2->getColliderComponent("selectableUnit");
-
-							if (!unitEntity->currentDestination && collidesWith(*unitEntity->collider, colliderAnotherUnit))
-							{
-								unitEntity->isOverlapped = true;
-								Vector2D direction = unitEntity->transform->position - entity2->getComponent<TransformComponent>().position;
-								direction.normalize();
-								unitEntity->transform->velocity = direction * unitEntity->transform->speed;
-							}
-							else if (unitEntity->isOverlapped)
-							{
-								// Check if the unitEntity is colliding with any other entity
-								bool isColliding = false;
-								for (auto& otherEntity : entities)
-								{
-									if (otherEntity != entity1 && otherEntity->hasColliderComponent("selectableUnit"))
-									{
-										ColliderComponent& otherCollider = otherEntity->getColliderComponent("selectableUnit");
-										if (collidesWith(*unitEntity->collider, otherCollider))
-										{
-											isColliding = true;
-											break;
-										}
-									}
-								}
-
-								// Only reset the isOverlapped flag and velocity if the unitEntity is not colliding with any other entity
-								if (!isColliding)
-								{
-									unitEntity->isOverlapped = false;
-									unitEntity->transform->velocity = Vector2D(0, 0);
-								}
-							}
-						}
+						checkUnitsCollisions(entity2, unitEntity, entities, entity1);
 					}
 				}
 			}
@@ -70,7 +34,50 @@ void CollisionSystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 	}
 }
 
-void CollisionSystem::checkPlayerCollision(std::unique_ptr<Entity>& entity2, ColliderComponent& collider1, Player* playerEntity)
+void CollisionSystem::checkUnitsCollisions(std::unique_ptr<Entity>& entity2, Unit* unitEntity, std::vector<std::unique_ptr<Entity>>& entities, std::unique_ptr<Entity>& entity1)
+{
+	if (entity2->hasColliderComponent("selectableUnit"))
+	{
+		ColliderComponent& colliderAnotherUnit = entity2->getColliderComponent("selectableUnit");
+
+		if (!unitEntity->currentDestination && collidesWith(*unitEntity->collider, colliderAnotherUnit))
+		{
+			unitEntity->isOverlapped = true;
+			Vector2D direction = unitEntity->transform->position - entity2->getComponent<TransformComponent>().position;
+			direction.normalize();
+			unitEntity->transform->velocity = direction * unitEntity->transform->speed;
+		}
+		else if (unitEntity->isOverlapped)
+		{
+			bool isColliding = false;
+			for (auto& otherEntity : entities)
+			{
+				if (otherEntity != entity1 && otherEntity->hasColliderComponent("selectableUnit"))
+				{
+					ColliderComponent& otherCollider = otherEntity->getColliderComponent("selectableUnit");
+					bool isDestinationSet = std::any_of(entities.begin(), entities.end(), [](const std::unique_ptr<Entity>& entity) {
+						Unit* unitEntity = dynamic_cast<Unit*>(entity.get());
+						return unitEntity && unitEntity->currentDestination;
+						});
+
+					if (!isDestinationSet && collidesWith(*unitEntity->collider, otherCollider))
+					{
+						isColliding = true;
+						break;
+					}
+				}
+			}
+
+			if (!isColliding)
+			{
+				unitEntity->isOverlapped = false;
+				unitEntity->transform->velocity = Vector2D(0, 0);
+			}
+		}
+	}
+}
+
+void CollisionSystem::checkPlayerCollisions(std::unique_ptr<Entity>& entity2, ColliderComponent& collider1, Player* playerEntity)
 {
 	if (entity2->hasColliderComponent("notwalkable")) {
 		ColliderComponent& colliderBlock = entity2->getColliderComponent("notwalkable");
