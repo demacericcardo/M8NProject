@@ -24,7 +24,7 @@ public:
 	{
 		transform = &addComponent<TransformComponent>(200.0f, 200.0f);
 
-		sprite = &addComponent<RenderComponent>("playerTexture", srcRect, 2);
+		sprite = &addComponent<RenderComponent>("playerTexture", srcRect);
 		sprite->zIndex = 100;
 
 		state = &addComponent<StateComponent<PlayerState>>(PlayerState::IDLE);

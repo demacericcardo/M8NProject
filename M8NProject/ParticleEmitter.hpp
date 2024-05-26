@@ -21,7 +21,7 @@ public:
 
 	void emitParticle(std::string textureID, Vector2D position, Vector2D velocity, float lifespan);
 	void emitParticle(std::string textureID, Vector2D position, int height, int width, Vector2D velocity, float lifespan);
-	void update();
+	void render();
 
 	bool hasParticleByTextureID(std::string textureID);
 };

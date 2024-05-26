@@ -7,11 +7,14 @@ void Camera::setTarget(TransformComponent& target)
 
 void Camera::update()
 {
-	if (target) {
-		Vector2D targetPos = target->position;
-		targetPos.x -= static_cast<float>(Game::SCREEN_WIDTH) / 2.0f;
-		targetPos.y -= static_cast<float>(Game::SCREEN_HEIGHT) / 2.0f;
+    if (target) {
+        Vector2D targetPos = target->position;
+        targetPos.x -= static_cast<float>(Game::SCREEN_WIDTH) / 2.0f;
+        targetPos.y -= static_cast<float>(Game::SCREEN_HEIGHT) / 2.0f;
 
-		position = position.lerp(targetPos, cameraSpeed * Game::frameLength);
-	}
+        targetPos.x *= zoomFactor;
+        targetPos.y *= zoomFactor;
+
+        position = position.lerp(targetPos, cameraSpeed * Game::frameLength);
+    }
 }

@@ -9,7 +9,7 @@ void ParticleEmitter::emitParticle(std::string textureID, Vector2D position, int
 	particles.push_back(Particle(textureID, position, height, width, velocity, lifespan));
 }
 
-void ParticleEmitter::update()
+void ParticleEmitter::render()
 {
 	for (Particle& particle : particles) {
 		particle.update();

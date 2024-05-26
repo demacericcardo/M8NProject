@@ -24,7 +24,7 @@ public:
 	Unit(Manager& manager, float x, float y) : Entity(manager)
 	{
 		transform = &addComponent<TransformComponent>(x, y);
-		sprite = &addComponent<RenderComponent>("bot", srcRect, 2);
+		sprite = &addComponent<RenderComponent>("bot", srcRect);
 		animation = &addComponent<AnimationComponent>("unitIdle");
 		state = &addComponent<StateComponent<UnitState>>(UnitState::IDLE);
 		collider = &addComponent<ColliderComponent>("selectableUnit");

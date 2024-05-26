@@ -17,14 +17,15 @@ public:
 	~Game();
 
 	void init(const char* title, bool fullscreen);
-	void renderTiles();
 	void initSystems();
+	void initTextures();
+	void initAnimations();
 	void handleEvents();
 	void update(float deltaTime);
 	void render(float interpolation);
+	void renderTiles();
+	void renderMouse();
 	void clean();
-	void loadTextures();
-	void loadAnimations();
 
 	bool running() const { return isRunning; }
 

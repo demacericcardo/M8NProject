@@ -38,10 +38,7 @@ void PlayerMovementSystem::update(std::vector<std::unique_ptr<Entity>>& entities
 
 				state.setState(PlayerState::WALK);
 				if (!ParticleEmitter::getInstance().hasParticleByTextureID("walkParticle"))
-				{
-					Vector2D positionOffset = { transform.position.x + 16.0f, transform.position.y + 32.0f };
-					ParticleEmitter::getInstance().emitParticle("walkParticle", positionOffset, Vector2D(0, 0), 5.0f);
-				}
+					ParticleEmitter::getInstance().emitParticle("walkParticle", transform.position, Vector2D(0, 0), 5.0f);
 			}
 			else
 			{

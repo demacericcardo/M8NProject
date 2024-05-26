@@ -1,5 +1,8 @@
 #pragma once
 
+#include <nlohmann/json.hpp>
+#include <fstream>
+
 #include "Game.hpp"
 #include "ECS.hpp"
 #include "Managers.hpp"
@@ -32,7 +35,7 @@ void Game::init(const char* title, bool fullscreen)
 		window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, flags);
 		renderer = SDL_CreateRenderer(window, -1, 0);
 
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+		SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
 		SDL_ShowCursor(SDL_DISABLE);
 
 		isRunning = true;
@@ -42,8 +45,8 @@ void Game::init(const char* title, bool fullscreen)
 		isRunning = false;
 	}
 
-	loadTextures();
-	loadAnimations();
+	initTextures();
+	initAnimations();
 
 	Rock& rock = manager.addEntity<Rock>(manager);
 	Player& player = manager.addEntity<Player>(manager);
@@ -61,27 +64,6 @@ void Game::init(const char* title, bool fullscreen)
 	Input::getInstance();
 }
 
-void Game::renderTiles() {
-	Camera& camera = Camera::getInstance();
-	SDL_Texture* groundTexture = AssetManager::getInstance().getTexture("ambient");
-
-	int startTileX = (static_cast<int>(camera.getPosition().x) / Game::TILE_SIZE) - Game::TILE_SIZE;
-	int startTileY = (static_cast<int>(camera.getPosition().y) / Game::TILE_SIZE) - Game::TILE_SIZE;
-	int endTileX = startTileX + (Game::SCREEN_WIDTH / Game::TILE_SIZE) + (Game::TILE_SIZE * 2);
-	int endTileY = startTileY + (Game::SCREEN_HEIGHT / Game::TILE_SIZE) + (Game::TILE_SIZE * 2);
-
-	int initialX = startTileX * Game::TILE_SIZE - static_cast<int>(camera.getPosition().x);
-	int initialY = startTileY * Game::TILE_SIZE - static_cast<int>(camera.getPosition().y);
-
-	for (int y = startTileY, destY = initialY; y < endTileY; y++, destY += Game::TILE_SIZE) {
-		for (int x = startTileX, destX = initialX; x < endTileX; x++, destX += Game::TILE_SIZE) {
-			SDL_Rect srcRect = { 56, 40, Game::TILE_SIZE, Game::TILE_SIZE };
-			SDL_Rect destRect = { destX, destY, Game::TILE_SIZE, Game::TILE_SIZE };
-			SDL_RenderCopy(Game::renderer, groundTexture, &srcRect, &destRect);
-		}
-	}
-}
-
 void Game::initSystems()
 {
 	manager.addSystem<InputSystem>(manager);
@@ -94,6 +76,50 @@ void Game::initSystems()
 	manager.addSystem<AnimationSystem>(manager);
 
 	manager.addRenderSystem<BaseRenderSystem>(manager);
+}
+
+void Game::initTextures()
+{
+	std::vector<std::pair<std::string, std::string>> textures = {
+		{"playerTexture", "assets/character.png"},
+		{"rockTexture", "assets/dirt.png"},
+		{"bot", "assets/bot.png"},
+		{"botSelected", "assets/botSelected.png"},
+		{"walkParticle", "assets/walkParticle.png"},
+		{"selectionParticle", "assets/selectionParticle.png"},
+		{ "cursor", "assets/cursor.png" },
+		{ "ambient", "assets/ambient.png"}
+	};
+
+	for (const auto& texture : textures)
+	{
+		if (!AssetManager::getInstance().addTexture(texture.first, texture.second.c_str()))
+		{
+			std::cout << "Failed to add texture to AssetManager.\n";
+			isRunning = false;
+			return;
+		}
+	}
+}
+
+void Game::initAnimations()
+{
+	std::vector<std::tuple<std::string, int, int, int>> animations = {
+		{"playerIdle", 0, 2, 200.0f},
+		{"playerWalk", 3, 4, 150.0f},
+		{"unitIdle", 0, 4, 200.0f},
+		{"unitWalk", 2, 4, 200.0f}
+	};
+
+	for (const auto& animation : animations)
+	{
+		if (!AnimationManager::getInstance().addAnimation(std::get<0>(animation), std::get<1>(animation), std::get<2>(animation), std::get<3>(animation)))
+		{
+			std::cout << "Failed to add animation to AnimationManager.\n";
+			isRunning = false;
+			return;
+		}
+	}
 }
 
 void Game::handleEvents()
@@ -130,21 +156,52 @@ void Game::update(float frameLenght) {
 void Game::render(float interpolation)
 {
 	Game::interpolation = interpolation;
+
 	SDL_RenderClear(renderer);
 
 	renderTiles();
-	ParticleEmitter::getInstance().update();
-
+	ParticleEmitter::getInstance().render();
 	manager.render();
+	renderMouse();
 
+	SDL_RenderPresent(renderer);
+}
+
+void Game::renderTiles() {
+	/*Camera& camera = Camera::getInstance();
+
+	std::ifstream i("assets/mainMapData.json");
+	nlohmann::json j;
+	i >> j;
+
+	int startTileX = (static_cast<int>(camera.getPosition().x) / Game::TILE_SIZE) - Game::TILE_SIZE;
+	int startTileY = (static_cast<int>(camera.getPosition().y) / Game::TILE_SIZE) - Game::TILE_SIZE;
+	int endTileX = startTileX + (Game::SCREEN_WIDTH / Game::TILE_SIZE) + (Game::TILE_SIZE * 2);
+	int endTileY = startTileY + (Game::SCREEN_HEIGHT / Game::TILE_SIZE) + (Game::TILE_SIZE * 2);
+
+	int initialX = startTileX * Game::TILE_SIZE - static_cast<int>(camera.getPosition().x);
+	int initialY = startTileY * Game::TILE_SIZE - static_cast<int>(camera.getPosition().y);
+
+	for (int y = startTileY, destY = initialY; y < endTileY; y++, destY += Game::TILE_SIZE) {
+		for (int x = startTileX, destX = initialX; x < endTileX; x++, destX += Game::TILE_SIZE) {
+			for (auto& frame : j["frames"]) {
+				SDL_Rect srcRect = { frame["frame"]["x"], frame["frame"]["y"], frame["frame"]["w"], frame["frame"]["h"] };
+				SDL_Rect destRect = { destX, destY, Game::TILE_SIZE, Game::TILE_SIZE };
+				SDL_Texture* texture = AssetManager::getInstance().getTexture(frame["filename"]);
+				SDL_RenderCopy(Game::renderer, texture, &srcRect, &destRect);
+			}
+		}
+	}*/
+}
+
+void Game::renderMouse()
+{
 	Input& input = Input::getInstance();
 
 	SDL_Rect cursorRect = { input.mouseXPos, input.mouseYPos, 32, 32 };
 	SDL_Rect srcRect = { 0, 0, 32, 32 };
 
 	SDL_RenderCopy(Game::renderer, AssetManager::getInstance().getTexture("cursor"), &srcRect, &cursorRect);
-
-	SDL_RenderPresent(renderer);
 }
 
 void Game::clean()
@@ -172,48 +229,4 @@ void Game::clean()
 	}
 
 	std::cout << "Game Cleaned..." << std::endl;
-}
-
-void Game::loadTextures()
-{
-	std::vector<std::pair<std::string, std::string>> textures = {
-		{"playerTexture", "assets/character.png"},
-		{"rockTexture", "assets/dirt.png"},
-		{"bot", "assets/bot.png"},
-		{"botSelected", "assets/botSelected.png"},
-		{"walkParticle", "assets/walkParticle.png"},
-		{"selectionParticle", "assets/selectionParticle.png"},
-		{ "cursor", "assets/cursor.png" },
-		{ "ambient", "assets/ambient.png"}
-	};
-
-	for (const auto& texture : textures)
-	{
-		if (!AssetManager::getInstance().addTexture(texture.first, texture.second.c_str()))
-		{
-			std::cout << "Failed to add texture to AssetManager.\n";
-			isRunning = false;
-			return;
-		}
-	}
-}
-
-void Game::loadAnimations()
-{
-	std::vector<std::tuple<std::string, int, int, int>> animations = {
-		{"playerIdle", 0, 2, 200.0f},
-		{"playerWalk", 3, 4, 150.0f},
-		{"unitIdle", 0, 4, 200.0f},
-		{"unitWalk", 2, 4, 200.0f}
-	};
-
-	for (const auto& animation : animations)
-	{
-		if (!AnimationManager::getInstance().addAnimation(std::get<0>(animation), std::get<1>(animation), std::get<2>(animation), std::get<3>(animation)))
-		{
-			std::cout << "Failed to add animation to AnimationManager.\n";
-			isRunning = false;
-			return;
-		}
-	}
 }
