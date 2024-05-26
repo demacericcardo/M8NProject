@@ -35,7 +35,7 @@ void Game::init(const char* title, bool fullscreen)
 		window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, flags);
 		renderer = SDL_CreateRenderer(window, -1, 0);
 
-		SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
+		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_ShowCursor(SDL_DISABLE);
 
 		isRunning = true;
@@ -74,6 +74,7 @@ void Game::initSystems()
 	manager.addSystem<UnitsMovementSystem>(manager);
 	manager.addSystem<StateAnimationSystem>(manager);
 	manager.addSystem<AnimationSystem>(manager);
+	manager.addSystem<HighlightSystem>(manager);
 
 	manager.addRenderSystem<BaseRenderSystem>(manager);
 }
@@ -82,7 +83,8 @@ void Game::initTextures()
 {
 	std::vector<std::pair<std::string, std::string>> textures = {
 		{"playerTexture", "assets/character.png"},
-		{"rockTexture", "assets/dirt.png"},
+		{"rock", "assets/rock.png"},
+		{"rockHighlighted", "assets/rockHighlighted.png"},
 		{"bot", "assets/bot.png"},
 		{"botSelected", "assets/botSelected.png"},
 		{"walkParticle", "assets/walkParticle.png"},

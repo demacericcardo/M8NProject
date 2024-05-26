@@ -29,7 +29,7 @@ public:
 
 		state = &addComponent<StateComponent<PlayerState>>(PlayerState::IDLE);
 		animation = &addComponent<AnimationComponent>("playerIdle");
-		collider = &addComponent<ColliderComponent>(static_cast<int>(transform->position.x), static_cast<int>(transform->position.y), sprite->width, sprite->height, "player");
+		collider = &addComponent<ColliderComponent>(transform, sprite->width, sprite->height, "player");
 	}
 	~Player() {}
 };

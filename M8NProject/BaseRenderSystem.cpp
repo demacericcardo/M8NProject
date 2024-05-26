@@ -42,18 +42,40 @@ void BaseRenderSystem::render(std::vector<std::unique_ptr<Entity>>& entities)
 				interpolatedPosition = transform.position;
 			}
 
+			float renderScale = render.scale * Camera::getInstance().getZoom();
+
 			render.destRect.x = static_cast<int>(interpolatedPosition.x - cameraPos.x);
 			render.destRect.y = static_cast<int>(interpolatedPosition.y - cameraPos.y);
 
-			render.destRect.w = render.width * render.scale;
-			render.destRect.h = render.height * render.scale;
+			render.destRect.w = render.width * renderScale;
+			render.destRect.h = render.height * renderScale;
 
 			SDL_RendererFlip flip = render.isNotFlipped ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
 
 			SDL_RenderCopyEx(Game::renderer, AssetManager::getInstance().getTexture(render.getTextureID()), &render.srcRect, &render.destRect, 0, NULL, flip);
 		}
 
+		renderColliders(entity, cameraPos);
 		renderPlayerInterface(entity);
+	}
+}
+
+void BaseRenderSystem::renderColliders(std::unique_ptr<Entity>& entity, Vector2D& cameraPos)
+{
+	if (entity->hasComponent<ColliderComponent>() && entity->hasColliderComponent("notwalkable"))
+	{
+		ColliderComponent& colliderComponent = entity->getComponent<ColliderComponent>();
+
+		SDL_Rect rect{};
+
+		rect.x = static_cast<int>((colliderComponent.collider.x - cameraPos.x));
+		rect.y = static_cast<int>((colliderComponent.collider.y - cameraPos.y));
+		rect.w = static_cast<int>(colliderComponent.collider.w);
+		rect.h = static_cast<int>(colliderComponent.collider.h);
+
+		SDL_SetRenderDrawColor(Game::renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+		SDL_RenderDrawRect(Game::renderer, &rect);
+		SDL_SetRenderDrawColor(Game::renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
 	}
 }
 

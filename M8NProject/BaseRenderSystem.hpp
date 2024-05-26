@@ -18,5 +18,6 @@ public:
 	~BaseRenderSystem() {}
 
 	void render(std::vector<std::unique_ptr<Entity>>& entities) override;
+	void renderColliders(std::unique_ptr<Entity>& entity, Vector2D& cameraPos);
 	void renderPlayerInterface(std::unique_ptr<Entity>& entity);
 };

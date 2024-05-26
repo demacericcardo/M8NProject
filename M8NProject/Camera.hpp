@@ -11,7 +11,7 @@ private:
 	Vector2D position;
 	TransformComponent* target;
 
-	float zoomFactor = 2.0f;
+	float zoomFactor = 2.5f;
 	float cameraSpeed = 20.0f;
 
 	Camera() : target(nullptr) {}

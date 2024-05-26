@@ -4,15 +4,22 @@
 
 void CollisionSystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 {
+	float zoom = Camera::getInstance().getZoom();
+
 	for (auto& entity1 : entities)
 	{
 		if (entity1->hasComponent<ColliderComponent>() && entity1->hasComponent<TransformComponent>())
 		{
 			TransformComponent& transform1 = entity1->getComponent<TransformComponent>();
-			ColliderComponent& collider1 = entity1->getComponent<ColliderComponent>();
+			ColliderComponent& colliderComponent1 = entity1->getComponent<ColliderComponent>();
 
-			collider1.collider.x = static_cast<int>(transform1.position.x);
-			collider1.collider.y = static_cast<int>(transform1.position.y);
+			colliderComponent1.collider.x = static_cast<int>(transform1.position.x);
+			colliderComponent1.collider.y = static_cast<int>(transform1.position.y);
+
+			float renderScale = colliderComponent1.scale * zoom;
+
+			colliderComponent1.collider.w = colliderComponent1.width * renderScale;
+			colliderComponent1.collider.h = colliderComponent1.height * renderScale;
 
 			Player* playerEntity = dynamic_cast<Player*>(entity1.get());
 			Unit* unitEntity = dynamic_cast<Unit*>(entity1.get());
@@ -22,7 +29,7 @@ void CollisionSystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 				if (entity1 != entity2 && entity2->hasComponent<ColliderComponent>())
 				{
 					if (playerEntity)
-						checkPlayerCollisions(entity2, collider1, playerEntity);
+						checkPlayerCollisions(entity2, colliderComponent1, playerEntity);
 
 					if (unitEntity)
 					{

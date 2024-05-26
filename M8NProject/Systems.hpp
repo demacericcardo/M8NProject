@@ -9,3 +9,4 @@
 #include "UnitsMovementSystem.hpp"
 #include "StateAnimationSystem.hpp"
 #include "AnimationSystem.hpp"
+#include "HighlightSystem.hpp"
