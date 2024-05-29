@@ -62,7 +62,7 @@ void BaseRenderSystem::render(std::vector<std::unique_ptr<Entity>>& entities)
 
 void BaseRenderSystem::renderColliders(std::unique_ptr<Entity>& entity, Vector2D& cameraPos)
 {
-	if (entity->hasComponent<ColliderComponent>() && entity->hasColliderComponent("notwalkable"))
+	if (entity->hasComponent<ColliderComponent>() && (entity->hasColliderComponent("notwalkable") || entity->hasColliderComponent("player")))
 	{
 		ColliderComponent& colliderComponent = entity->getComponent<ColliderComponent>();
 
@@ -77,7 +77,7 @@ void BaseRenderSystem::renderColliders(std::unique_ptr<Entity>& entity, Vector2D
 		SDL_RenderDrawRect(Game::renderer, &rect);
 		SDL_SetRenderDrawColor(Game::renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
 	}
-}
+}   
 
 void BaseRenderSystem::renderPlayerInterface(std::unique_ptr<Entity>& entity)
 {

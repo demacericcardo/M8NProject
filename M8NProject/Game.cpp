@@ -200,8 +200,11 @@ void Game::renderMouse()
 {
 	Input& input = Input::getInstance();
 
-	SDL_Rect cursorRect = { input.mouseXPos, input.mouseYPos, 32, 32 };
-	SDL_Rect srcRect = { 0, 0, 32, 32 };
+	int cursorWidth = 32; 
+	int cursorHeight = 32;
+
+	SDL_Rect cursorRect = { input.mouseXPos - cursorWidth / 2, input.mouseYPos - cursorHeight / 2, cursorWidth, cursorHeight };
+	SDL_Rect srcRect = { 0, 0, cursorWidth, cursorHeight };
 
 	SDL_RenderCopy(Game::renderer, AssetManager::getInstance().getTexture("cursor"), &srcRect, &cursorRect);
 }
