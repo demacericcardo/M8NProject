@@ -55,29 +55,9 @@ void BaseRenderSystem::render(std::vector<std::unique_ptr<Entity>>& entities)
 			SDL_RenderCopyEx(Game::renderer, AssetManager::getInstance().getTexture(render.getTextureID()), &render.srcRect, &render.destRect, 0, NULL, flip);
 		}
 
-		renderColliders(entity, cameraPos);
 		renderPlayerInterface(entity);
 	}
 }
-
-void BaseRenderSystem::renderColliders(std::unique_ptr<Entity>& entity, Vector2D& cameraPos)
-{
-	if (entity->hasComponent<ColliderComponent>() && (entity->hasColliderComponent("notwalkable") || entity->hasColliderComponent("player")))
-	{
-		ColliderComponent& colliderComponent = entity->getComponent<ColliderComponent>();
-
-		SDL_Rect rect{};
-
-		rect.x = static_cast<int>((colliderComponent.collider.x - cameraPos.x));
-		rect.y = static_cast<int>((colliderComponent.collider.y - cameraPos.y));
-		rect.w = static_cast<int>(colliderComponent.collider.w);
-		rect.h = static_cast<int>(colliderComponent.collider.h);
-
-		SDL_SetRenderDrawColor(Game::renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-		SDL_RenderDrawRect(Game::renderer, &rect);
-		SDL_SetRenderDrawColor(Game::renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-	}
-}   
 
 void BaseRenderSystem::renderPlayerInterface(std::unique_ptr<Entity>& entity)
 {
@@ -110,7 +90,7 @@ void BaseRenderSystem::renderPlayerInterface(std::unique_ptr<Entity>& entity)
 
 			SDL_SetRenderDrawColor(Game::renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
 			SDL_RenderDrawRect(Game::renderer, &destRect);
-			SDL_SetRenderDrawColor(Game::renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+			SDL_SetRenderDrawColor(Game::renderer, 100, 100, 100, SDL_ALPHA_OPAQUE);
 		}
 	}
 }

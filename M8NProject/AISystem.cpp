@@ -47,17 +47,12 @@ void AISystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 
 			if (input.mouseRightClick && unitEntity->isSelected)
 			{
-				ParticleEmitter::getInstance().emitParticle("selectionParticle", { static_cast<float>(input.mouseXPos) + cameraPos.x, static_cast<float>(input.mouseYPos) + cameraPos.y }, Vector2D(0, 0), 2.0f);
+				float locationX = static_cast<float>(input.mouseXPos - Game::CURSOR_WIDTH / 2) + cameraPos.x;
+				float locationY = static_cast<float>(input.mouseYPos - Game::CURSOR_HEIGHT / 2) + cameraPos.y;
 
-				if (unitEntity->currentDestination)
-				{
-					unitEntity->currentDestination->x = static_cast<float>(input.mouseXPos + cameraPos.x);
-					unitEntity->currentDestination->y = static_cast<float>(input.mouseYPos + cameraPos.y);
-				}
-				else
-				{
-					unitEntity->currentDestination = { static_cast<float>(input.mouseXPos + cameraPos.x), static_cast<float>(input.mouseYPos + cameraPos.y) };
-				}
+				ParticleEmitter::getInstance().emitParticle("selectionParticle", { locationX, locationY }, Vector2D(0, 0), 2.0f);
+
+				unitEntity->currentDestination = { locationX, locationY };
 			}
 
 			if (unitEntity->currentDestination)
@@ -65,7 +60,7 @@ void AISystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 				Vector2D direction = *unitEntity->currentDestination - transformComponent.position;
 				float distance = direction.magnitude();
 
-				if (distance > 10.0f)
+				if (distance > 5.0f)
 				{
 					direction = direction.normalize();
 					transformComponent.position += Vector2D(direction.x * unitEntity->speed * Game::frameLength, direction.y * unitEntity->speed * Game::frameLength);

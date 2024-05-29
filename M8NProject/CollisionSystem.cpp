@@ -11,15 +11,18 @@ void CollisionSystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 		if (entity1->hasComponent<ColliderComponent>() && entity1->hasComponent<TransformComponent>())
 		{
 			TransformComponent& transform1 = entity1->getComponent<TransformComponent>();
-			ColliderComponent& colliderComponent1 = entity1->getComponent<ColliderComponent>();
+			std::vector<ColliderComponent*> colliderComponents = entity1->getComponents<ColliderComponent>();
 
-			colliderComponent1.collider.x = static_cast<int>(transform1.position.x);
-			colliderComponent1.collider.y = static_cast<int>(transform1.position.y);
+			for (ColliderComponent* colliderComponent : colliderComponents)
+			{
+				colliderComponent->collider.x = static_cast<int>(transform1.position.x);
+				colliderComponent->collider.y = static_cast<int>(transform1.position.y);
 
-			float renderScale = colliderComponent1.scale * zoom;
+				float renderScale = colliderComponent->scale * zoom;
 
-			colliderComponent1.collider.w = colliderComponent1.width * renderScale;
-			colliderComponent1.collider.h = colliderComponent1.height * renderScale;
+				colliderComponent->collider.w = colliderComponent->width * renderScale;
+				colliderComponent->collider.h = colliderComponent->height * renderScale;
+			}
 
 			Player* playerEntity = dynamic_cast<Player*>(entity1.get());
 			Unit* unitEntity = dynamic_cast<Unit*>(entity1.get());
@@ -29,7 +32,7 @@ void CollisionSystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 				if (entity1 != entity2 && entity2->hasComponent<ColliderComponent>())
 				{
 					if (playerEntity)
-						checkPlayerCollisions(entity2, colliderComponent1, playerEntity);
+						checkPlayerCollisions(entity2, playerEntity);
 
 					if (unitEntity)
 					{
@@ -84,12 +87,14 @@ void CollisionSystem::checkUnitsCollisions(std::unique_ptr<Entity>& entity2, Uni
 	}
 }
 
-void CollisionSystem::checkPlayerCollisions(std::unique_ptr<Entity>& entity2, ColliderComponent& collider1, Player* playerEntity)
+void CollisionSystem::checkPlayerCollisions(std::unique_ptr<Entity>& entity2, Player* playerEntity)
 {
-	if (entity2->hasColliderComponent("notwalkable")) {
-		ColliderComponent& colliderBlock = entity2->getColliderComponent("notwalkable");
+	ColliderComponent& playerCollider = playerEntity->getColliderComponent("player");
 
-		if (collidesWith(collider1, colliderBlock) && playerEntity->transform->previousPosition)
+	if (entity2->hasColliderComponent("notwalkable")) {
+		ColliderComponent& blockCollider = entity2->getColliderComponent("notwalkable");
+
+		if (collidesWith(playerCollider, blockCollider) && playerEntity->transform->previousPosition)
 			playerEntity->transform->position = *playerEntity->transform->previousPosition;
 	}
 
@@ -97,7 +102,7 @@ void CollisionSystem::checkPlayerCollisions(std::unique_ptr<Entity>& entity2, Co
 	{
 		ColliderComponent& colliderInteractable = entity2->getColliderComponent("interactable");
 
-		if (collidesWith(collider1, colliderInteractable))
+		if (collidesWith(playerCollider, colliderInteractable))
 			playerEntity->interactableEntity = entity2.get();
 		else
 			playerEntity->interactableEntity = nullptr;

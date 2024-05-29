@@ -35,7 +35,7 @@ void Game::init(const char* title, bool fullscreen)
 		window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, flags);
 		renderer = SDL_CreateRenderer(window, -1, 0);
 
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+		SDL_SetRenderDrawColor(renderer, 100, 100, 100, SDL_ALPHA_OPAQUE);
 		SDL_ShowCursor(SDL_DISABLE);
 
 		isRunning = true;
@@ -200,13 +200,10 @@ void Game::renderMouse()
 {
 	Input& input = Input::getInstance();
 
-	int cursorWidth = 32; 
-	int cursorHeight = 32;
+	SDL_Rect srcRect = { 0, 0, CURSOR_WIDTH, CURSOR_HEIGHT };
+	SDL_Rect destRect = { input.mouseXPos - CURSOR_WIDTH / 2, input.mouseYPos - CURSOR_HEIGHT / 2, CURSOR_WIDTH, CURSOR_HEIGHT };
 
-	SDL_Rect cursorRect = { input.mouseXPos - cursorWidth / 2, input.mouseYPos - cursorHeight / 2, cursorWidth, cursorHeight };
-	SDL_Rect srcRect = { 0, 0, cursorWidth, cursorHeight };
-
-	SDL_RenderCopy(Game::renderer, AssetManager::getInstance().getTexture("cursor"), &srcRect, &cursorRect);
+	SDL_RenderCopy(Game::renderer, AssetManager::getInstance().getTexture("cursor"), &srcRect, &destRect);
 }
 
 void Game::clean()

@@ -75,6 +75,20 @@ public:
 		return *static_cast<T*>(componentRawPointer);
 	}
 
+	template <typename T> std::vector<T*> getComponents() const
+	{
+		static_assert(std::is_base_of<Component, T>::value, "");
+		std::vector<T*> result;
+		for (const auto& component : components)
+		{
+			if (T* casted = dynamic_cast<T*>(component.get()))
+			{
+				result.push_back(casted);
+			}
+		}
+		return result;
+	}
+
 	bool hasColliderComponent(const std::string& tag)
 	{
 		for (auto& component : components)

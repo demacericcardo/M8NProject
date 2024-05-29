@@ -9,12 +9,17 @@ class Rock : public Entity
 private:
 	int minerals = 10;
 public:
+	TransformComponent* transform;
+	RenderComponent* sprite;
+	ColliderComponent* collider;
+	ColliderComponent* colliderHighlight;
+
 	Rock(Manager& manager) : Entity(manager)
 	{
 		transform = &addComponent<TransformComponent>(100.0f, 100.0f);
 		sprite = &addComponent<RenderComponent>("rock");
-		collider = &addComponent<ColliderComponent>(transform, sprite->width, sprite->height, "notwalkable");
 		colliderHighlight = &addComponent<ColliderComponent>(transform, sprite->width, sprite->height, "highlightCollider");
+		collider = &addComponent<ColliderComponent>(transform, sprite->width, sprite->height, "notwalkable");
 	}
 	~Rock() {}
 
@@ -25,9 +30,4 @@ public:
 			destroy();
 		}
 	}
-
-	TransformComponent* transform;
-	RenderComponent* sprite;
-	ColliderComponent* collider;
-	ColliderComponent* colliderHighlight;
 };

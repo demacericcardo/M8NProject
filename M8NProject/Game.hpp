@@ -34,6 +34,9 @@ public:
 
 	static const int TILE_SIZE = 32;
 
+	static const int CURSOR_WIDTH = 32;
+	static const int CURSOR_HEIGHT = 32;
+
 	static float frameLength;
 	static float interpolation;
 

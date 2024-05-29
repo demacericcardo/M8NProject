@@ -17,18 +17,25 @@ void ParticleEmitter::render()
 
 	for (const Particle& particle : particles) {
 		SDL_Rect srcRect = { 0, 0, particle.height, particle.width };
-		Vector2D cameraPos = Camera::getInstance().getPosition();
 
-		float scaleFactor = particle.getRemainingLifetimeRatio();
-		int scaledWidth = static_cast<int>(particle.width * scaleFactor);
-		int scaledHeight = static_cast<int>(particle.height * scaleFactor);
+		Vector2D cameraPos = Camera::getInstance().getPosition();
+		float zoom = Camera::getInstance().getZoom();
+
+		int scaledWidth = static_cast<int>(particle.width * zoom);
+		int scaledHeight = static_cast<int>(particle.height * zoom);
 
 		int offsetX = (particle.width - scaledWidth) / 2;
 		int offsetY = (particle.height - scaledHeight) / 2;
 
-		SDL_Rect dstRect = { static_cast<int>(particle.position.x - cameraPos.x) + offsetX, static_cast<int>(particle.position.y - cameraPos.y) + offsetY, scaledWidth, scaledHeight };
+		SDL_Rect destRect =
+		{
+			static_cast<int>(particle.position.x - cameraPos.x) + offsetX,
+			static_cast<int>(particle.position.y - cameraPos.y) + offsetY,
+			scaledWidth,
+			scaledHeight
+		};
 
-		SDL_RenderCopy(Game::renderer, AssetManager::getInstance().getTexture(particle.textureID), &srcRect, &dstRect);
+		SDL_RenderCopy(Game::renderer, AssetManager::getInstance().getTexture(particle.textureID), &srcRect, &destRect);
 	}
 
 	particles.erase(std::remove_if(particles.begin(), particles.end(),
