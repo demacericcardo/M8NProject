@@ -117,6 +117,9 @@
     <ClCompile Include="HighlightSystem.cpp">
       <Filter>Source Files\ECS\Systems</Filter>
     </ClCompile>
+    <ClCompile Include="ColliderLocationSystem.cpp">
+      <Filter>Source Files\ECS\Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -240,6 +243,9 @@
       <Filter>Header Files\ECS\Entities</Filter>
     </ClInclude>
     <ClInclude Include="HighlightSystem.hpp">
+      <Filter>Header Files\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderLocationSystem.hpp">
       <Filter>Header Files\ECS\Systems</Filter>
     </ClInclude>
   </ItemGroup>

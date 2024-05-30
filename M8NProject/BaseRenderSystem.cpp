@@ -35,10 +35,12 @@ void BaseRenderSystem::render(std::vector<std::unique_ptr<Entity>>& entities)
 			const TransformComponent& transform = entity->getComponent<TransformComponent>();
 
 			Vector2D interpolatedPosition;
-			if (transform.previousPosition) {
+			if (transform.previousPosition)
+			{
 				interpolatedPosition = *transform.previousPosition + (transform.position - *transform.previousPosition) * Game::interpolation;
 			}
-			else {
+			else
+			{
 				interpolatedPosition = transform.position;
 			}
 

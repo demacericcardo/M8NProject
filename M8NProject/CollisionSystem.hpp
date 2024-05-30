@@ -14,6 +14,4 @@ public:
 	void checkUnitsCollisions(std::unique_ptr<Entity>& entity2, Unit* unitEntity, std::vector<std::unique_ptr<Entity>>& entities, std::unique_ptr<Entity>& entity1);
 
 	void checkPlayerCollisions(std::unique_ptr<Entity>& entity2, Player* playerEntity);
-
-	bool collidesWith(const ColliderComponent& first, const ColliderComponent& second);
 };

@@ -75,6 +75,7 @@ void Game::initSystems()
 	manager.addSystem<StateAnimationSystem>(manager);
 	manager.addSystem<AnimationSystem>(manager);
 	manager.addSystem<HighlightSystem>(manager);
+	manager.addSystem<ColliderLocationSystem>(manager);
 
 	manager.addRenderSystem<BaseRenderSystem>(manager);
 }

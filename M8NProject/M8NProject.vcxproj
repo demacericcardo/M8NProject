@@ -133,6 +133,7 @@
     <ClCompile Include="AnimationSystem.cpp" />
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ColliderLocationSystem.cpp" />
     <ClCompile Include="CollisionSystem.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="HighlightSystem.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="AnimationComponent.hpp" />
     <ClInclude Include="AnimationManager.hpp" />
     <ClInclude Include="AnimationSystem.hpp" />
+    <ClInclude Include="ColliderLocationSystem.hpp" />
     <ClInclude Include="HighlightSystem.hpp" />
     <ClInclude Include="MainBase.hpp" />
     <ClInclude Include="Unit.hpp" />

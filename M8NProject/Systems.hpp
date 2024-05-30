@@ -10,3 +10,4 @@
 #include "StateAnimationSystem.hpp"
 #include "AnimationSystem.hpp"
 #include "HighlightSystem.hpp"
+#include "ColliderLocationSystem.hpp"

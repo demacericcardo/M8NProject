@@ -6,38 +6,22 @@ void CollisionSystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 {
 	float zoom = Camera::getInstance().getZoom();
 
-	for (auto& entity1 : entities)
+	for (auto& entity : entities)
 	{
-		if (entity1->hasComponent<ColliderComponent>() && entity1->hasComponent<TransformComponent>())
+		if (entity->hasComponent<ColliderComponent>() && entity->hasComponent<TransformComponent>())
 		{
-			TransformComponent& transform1 = entity1->getComponent<TransformComponent>();
-			std::vector<ColliderComponent*> colliderComponents = entity1->getComponents<ColliderComponent>();
+			Player* playerEntity = dynamic_cast<Player*>(entity.get());
+			Unit* unitEntity = dynamic_cast<Unit*>(entity.get());
 
-			for (ColliderComponent* colliderComponent : colliderComponents)
+			for (auto& collidedEntity : entities)
 			{
-				colliderComponent->collider.x = static_cast<int>(transform1.position.x);
-				colliderComponent->collider.y = static_cast<int>(transform1.position.y);
-
-				float renderScale = colliderComponent->scale * zoom;
-
-				colliderComponent->collider.w = colliderComponent->width * renderScale;
-				colliderComponent->collider.h = colliderComponent->height * renderScale;
-			}
-
-			Player* playerEntity = dynamic_cast<Player*>(entity1.get());
-			Unit* unitEntity = dynamic_cast<Unit*>(entity1.get());
-
-			for (auto& entity2 : entities)
-			{
-				if (entity1 != entity2 && entity2->hasComponent<ColliderComponent>())
+				if (entity != collidedEntity && collidedEntity->hasComponent<ColliderComponent>())
 				{
 					if (playerEntity)
-						checkPlayerCollisions(entity2, playerEntity);
+						checkPlayerCollisions(collidedEntity, playerEntity);
 
 					if (unitEntity)
-					{
-						checkUnitsCollisions(entity2, unitEntity, entities, entity1);
-					}
+						checkUnitsCollisions(collidedEntity, unitEntity, entities, entity);
 				}
 			}
 		}
@@ -50,7 +34,7 @@ void CollisionSystem::checkUnitsCollisions(std::unique_ptr<Entity>& entity2, Uni
 	{
 		ColliderComponent& colliderAnotherUnit = entity2->getColliderComponent("selectableUnit");
 
-		if (!unitEntity->currentDestination && collidesWith(*unitEntity->collider, colliderAnotherUnit))
+		if (!unitEntity->currentDestination && SDL_HasIntersection(&unitEntity->collider->collider, &colliderAnotherUnit.collider))
 		{
 			unitEntity->isOverlapped = true;
 			Vector2D direction = unitEntity->transform->position - entity2->getComponent<TransformComponent>().position;
@@ -70,7 +54,7 @@ void CollisionSystem::checkUnitsCollisions(std::unique_ptr<Entity>& entity2, Uni
 						return unitEntity && unitEntity->currentDestination;
 						});
 
-					if (!isDestinationSet && collidesWith(*unitEntity->collider, otherCollider))
+					if (!isDestinationSet && SDL_HasIntersection(&unitEntity->collider->collider, &otherCollider.collider))
 					{
 						isColliding = true;
 						break;
@@ -94,7 +78,7 @@ void CollisionSystem::checkPlayerCollisions(std::unique_ptr<Entity>& entity2, Pl
 	if (entity2->hasColliderComponent("notwalkable")) {
 		ColliderComponent& blockCollider = entity2->getColliderComponent("notwalkable");
 
-		if (collidesWith(playerCollider, blockCollider) && playerEntity->transform->previousPosition)
+		if (SDL_HasIntersection(&playerCollider.collider, &blockCollider.collider) && playerEntity->transform->previousPosition)
 			playerEntity->transform->position = *playerEntity->transform->previousPosition;
 	}
 
@@ -102,14 +86,9 @@ void CollisionSystem::checkPlayerCollisions(std::unique_ptr<Entity>& entity2, Pl
 	{
 		ColliderComponent& colliderInteractable = entity2->getColliderComponent("interactable");
 
-		if (collidesWith(playerCollider, colliderInteractable))
+		if (SDL_HasIntersection(&playerCollider.collider, &colliderInteractable.collider))
 			playerEntity->interactableEntity = entity2.get();
 		else
 			playerEntity->interactableEntity = nullptr;
 	}
-}
-
-bool CollisionSystem::collidesWith(const ColliderComponent& first, const ColliderComponent& second)
-{
-	return SDL_HasIntersection(&first.collider, &second.collider);
 }
