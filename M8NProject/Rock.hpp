@@ -18,7 +18,7 @@ public:
 	{
 		transform = &addComponent<TransformComponent>(100.0f, 100.0f);
 		sprite = &addComponent<RenderComponent>("rock");
-		colliderHighlight = &addComponent<ColliderComponent>(transform, sprite->width, sprite->height, "highlightCollider");
+		colliderHighlight = &addComponent<ColliderComponent>(transform, sprite->width, sprite->height, "targetCollider");
 		collider = &addComponent<ColliderComponent>(transform, sprite->width, sprite->height, "notwalkable");
 	}
 	~Rock() {}

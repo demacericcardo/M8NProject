@@ -74,7 +74,7 @@ void Game::initSystems()
 	manager.addSystem<UnitsMovementSystem>(manager);
 	manager.addSystem<StateAnimationSystem>(manager);
 	manager.addSystem<AnimationSystem>(manager);
-	manager.addSystem<HighlightSystem>(manager);
+	manager.addSystem<MouseOverlaySystem>(manager);
 	manager.addSystem<ColliderLocationSystem>(manager);
 
 	manager.addRenderSystem<BaseRenderSystem>(manager);

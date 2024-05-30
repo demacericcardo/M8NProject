@@ -34,5 +34,6 @@ public:
 	bool mouseLeftClick = false;
 	bool mouseRightClick = false;
 
-	std::unique_ptr<Vector2D> mousePosClicked = nullptr;
+	std::optional<Vector2D> mousePosClicked;
+	void* entityMouseOverlaid = nullptr;
 };

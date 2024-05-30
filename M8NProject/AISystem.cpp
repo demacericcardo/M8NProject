@@ -47,12 +47,23 @@ void AISystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 
 			if (input.mouseRightClick && unitEntity->isSelected)
 			{
-				float locationX = static_cast<float>(input.mouseXPos - Game::CURSOR_WIDTH / 2) + cameraPos.x;
-				float locationY = static_cast<float>(input.mouseYPos - Game::CURSOR_HEIGHT / 2) + cameraPos.y;
+				if (input.entityMouseOverlaid)
+				{
+					Rock* targetEntity = static_cast<Rock*>(input.entityMouseOverlaid);
 
-				ParticleEmitter::getInstance().emitParticle("selectionParticle", { locationX, locationY }, Vector2D(0, 0), 2.0f);
+					unitEntity->currentDestination.reset();
+					unitEntity->currentTarget = targetEntity->transform;
+				}
+				else
+				{
+					float locationX = static_cast<float>(input.mouseXPos - Game::CURSOR_WIDTH / 2) + cameraPos.x;
+					float locationY = static_cast<float>(input.mouseYPos - Game::CURSOR_HEIGHT / 2) + cameraPos.y;
 
-				unitEntity->currentDestination = { locationX, locationY };
+					ParticleEmitter::getInstance().emitParticle("selectionParticle", { locationX, locationY }, Vector2D(0, 0), 2.0f);
+
+					unitEntity->currentTarget = nullptr;
+					unitEntity->currentDestination = { locationX, locationY };
+				}
 			}
 
 			if (unitEntity->currentDestination)
@@ -71,6 +82,27 @@ void AISystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 					unitEntity->currentDestination.reset();
 					unitEntity->state->setState(UnitState::IDLE);
 				}
+			}
+			else if (unitEntity->currentTarget)
+			{
+				Vector2D direction = unitEntity->currentTarget->position - transformComponent.position;
+				float distance = direction.magnitude();
+
+				if (distance > 5.0f)
+				{
+					direction = direction.normalize();
+					transformComponent.position += Vector2D(direction.x * unitEntity->speed * Game::frameLength, direction.y * unitEntity->speed * Game::frameLength);
+					unitEntity->state->setState(UnitState::WALK);
+				}
+				else
+				{
+					unitEntity->currentTarget = nullptr;
+					unitEntity->state->setState(UnitState::IDLE);
+				}
+			}
+			else
+			{
+				unitEntity->state->setState(UnitState::IDLE);
 			}
 		}
 	}

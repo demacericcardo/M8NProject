@@ -136,7 +136,7 @@
     <ClCompile Include="ColliderLocationSystem.cpp" />
     <ClCompile Include="CollisionSystem.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="HighlightSystem.cpp" />
+    <ClCompile Include="MouseOverlaySystem.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Particle.cpp" />
@@ -159,7 +159,7 @@
     <ClInclude Include="AnimationManager.hpp" />
     <ClInclude Include="AnimationSystem.hpp" />
     <ClInclude Include="ColliderLocationSystem.hpp" />
-    <ClInclude Include="HighlightSystem.hpp" />
+    <ClInclude Include="MouseOverlaySystem.hpp" />
     <ClInclude Include="MainBase.hpp" />
     <ClInclude Include="Unit.hpp" />
     <ClInclude Include="Camera.hpp" />

@@ -19,9 +19,7 @@ void InputSystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 	if (input.mouseLeftClick)
 	{
 		if (!input.mousePosClicked)
-		{
-			input.mousePosClicked = std::make_unique<Vector2D>(static_cast<float>(input.mouseXPos), static_cast<float>(input.mouseYPos));
-		}
+			input.mousePosClicked = Vector2D(static_cast<float>(input.mouseXPos), static_cast<float>(input.mouseYPos));
 	}
 	else
 	{

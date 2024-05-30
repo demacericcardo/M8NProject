@@ -114,7 +114,7 @@
     <ClCompile Include="BaseRenderSystem.cpp">
       <Filter>Source Files\ECS\RenderSystems</Filter>
     </ClCompile>
-    <ClCompile Include="HighlightSystem.cpp">
+    <ClCompile Include="MouseOverlaySystem.cpp">
       <Filter>Source Files\ECS\Systems</Filter>
     </ClCompile>
     <ClCompile Include="ColliderLocationSystem.cpp">
@@ -242,7 +242,7 @@
     <ClInclude Include="MainBase.hpp">
       <Filter>Header Files\ECS\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="HighlightSystem.hpp">
+    <ClInclude Include="MouseOverlaySystem.hpp">
       <Filter>Header Files\ECS\Systems</Filter>
     </ClInclude>
     <ClInclude Include="ColliderLocationSystem.hpp">
