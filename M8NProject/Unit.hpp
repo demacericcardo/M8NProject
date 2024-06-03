@@ -14,7 +14,7 @@ public:
 	bool isOverlapped = false;
 
 	std::optional<Vector2D> currentDestination;
-	TransformComponent* currentTarget = nullptr;
+	Entity* currentTarget = nullptr;
 
 	TransformComponent* transform = nullptr;
 	RenderComponent* sprite = nullptr;

@@ -14,96 +14,113 @@ void AISystem::update(std::vector<std::unique_ptr<Entity>>& entities)
 	{
 		Unit* unitEntity = dynamic_cast<Unit*>(entity.get());
 
-		if (unitEntity && unitEntity->hasComponent<TransformComponent>())
+		if (unitEntity)
 		{
-			TransformComponent& transformComponent = unitEntity->getComponent<TransformComponent>();
+			selectUnits(unitEntity, cameraPos);
+			changeTextureSelected(unitEntity);
+			moveUnitsInput(unitEntity, cameraPos);
+			IACoreFunctionality(unitEntity);
+		}
+	}
+}
 
-			if (input.mousePosClicked)
-			{
-				const TransformComponent& transform = unitEntity->getComponent<TransformComponent>();
-				SDL_Point botPosition = { static_cast<int>(transform.position.x - cameraPos.x), static_cast<int>(transform.position.y - cameraPos.y) };
+void AISystem::IACoreFunctionality(Unit* unitEntity)
+{
+	Vector2D direction;
+	float distance;
 
-				int minX = std::min(input.mouseXPos, static_cast<int>(input.mousePosClicked->x));
-				int minY = std::min(input.mouseYPos, static_cast<int>(input.mousePosClicked->y));
-				int maxX = std::max(input.mouseXPos, static_cast<int>(input.mousePosClicked->x));
-				int maxY = std::max(input.mouseYPos, static_cast<int>(input.mousePosClicked->y));
+	if (unitEntity->currentDestination)
+	{
+		direction = *unitEntity->currentDestination - unitEntity->transform->position;
+		distance = direction.magnitude();
+	}
+	else if (unitEntity->currentTarget)
+	{
+		direction = unitEntity->currentTarget->getComponent<TransformComponent>().position - unitEntity->transform->position;
+		distance = direction.magnitude();
+	}
+	else
+	{
+		unitEntity->state->setState(UnitState::IDLE);
+		return;
+	}
 
-				SDL_Rect rect = { minX, minY, maxX - minX, maxY - minY };
+	if (distance > 10.0f)
+	{
+		direction = direction.normalize();
+		unitEntity->transform->position += Vector2D(direction.x * unitEntity->speed * Game::frameLength, direction.y * unitEntity->speed * Game::frameLength);
+		unitEntity->state->setState(UnitState::WALK);
+	}
+	else
+	{
+		unitEntity->currentDestination.reset();
+		unitEntity->currentTarget = nullptr;
+		unitEntity->state->setState(UnitState::IDLE);
+	}
+}
 
-				SDL_Rect unitCollider = unitEntity->collider->collider;
-				unitCollider.x -= static_cast<int>(cameraPos.x);
-				unitCollider.y -= static_cast<int>(cameraPos.y);
+void AISystem::changeTextureSelected(Unit* unitEntity)
+{
+	if (unitEntity->isSelected)
+		unitEntity->sprite->setTextureId("botSelected");
+	else
+		unitEntity->sprite->setTextureId("bot");
+}
 
-				if (SDL_HasIntersection(&rect, &unitCollider))
-					unitEntity->isSelected = true;
-				else
-					unitEntity->isSelected = false;
-			}
+void AISystem::selectUnits(Unit* unitEntity, Vector2D& cameraPos)
+{
+	Input& input = Input::getInstance();
 
-			if (unitEntity->isSelected)
-				unitEntity->sprite->setTextureId("botSelected");
+	if (unitEntity->hasComponent<TransformComponent>())
+	{
+		TransformComponent& transformComponent = unitEntity->getComponent<TransformComponent>();
+
+		if (input.mousePosClicked)
+		{
+			const TransformComponent& transform = unitEntity->getComponent<TransformComponent>();
+			SDL_Point botPosition = { static_cast<int>(transform.position.x - cameraPos.x), static_cast<int>(transform.position.y - cameraPos.y) };
+
+			int minX = std::min(input.mouseXPos, static_cast<int>(input.mousePosClicked->x));
+			int minY = std::min(input.mouseYPos, static_cast<int>(input.mousePosClicked->y));
+			int maxX = std::max(input.mouseXPos, static_cast<int>(input.mousePosClicked->x));
+			int maxY = std::max(input.mouseYPos, static_cast<int>(input.mousePosClicked->y));
+
+			SDL_Rect rect = { minX, minY, maxX - minX, maxY - minY };
+
+			SDL_Rect unitCollider = unitEntity->collider->collider;
+			unitCollider.x -= static_cast<int>(cameraPos.x);
+			unitCollider.y -= static_cast<int>(cameraPos.y);
+
+			if (SDL_HasIntersection(&rect, &unitCollider))
+				unitEntity->isSelected = true;
 			else
-				unitEntity->sprite->setTextureId("bot");
+				unitEntity->isSelected = false;
+		}
+	}
+}
 
-			if (input.mouseRightClick && unitEntity->isSelected)
-			{
-				if (input.entityMouseOverlaid)
-				{
-					Rock* targetEntity = static_cast<Rock*>(input.entityMouseOverlaid);
+void AISystem::moveUnitsInput(Unit* unitEntity, Vector2D& cameraPos)
+{
+	Input& input = Input::getInstance();
 
-					unitEntity->currentDestination.reset();
-					unitEntity->currentTarget = targetEntity->transform;
-				}
-				else
-				{
-					float locationX = static_cast<float>(input.mouseXPos - Game::CURSOR_WIDTH / 2) + cameraPos.x;
-					float locationY = static_cast<float>(input.mouseYPos - Game::CURSOR_HEIGHT / 2) + cameraPos.y;
+	if (input.mouseRightClick && unitEntity->isSelected)
+	{
+		if (input.entityMouseOverlaid)
+		{
+			Rock* targetEntity = static_cast<Rock*>(input.entityMouseOverlaid);
 
-					ParticleEmitter::getInstance().emitParticle("selectionParticle", { locationX, locationY }, Vector2D(0, 0), 2.0f);
+			unitEntity->currentDestination.reset();
+			unitEntity->currentTarget = targetEntity;
+		}
+		else
+		{
+			float locationX = static_cast<float>(input.mouseXPos - Game::CURSOR_WIDTH / 2) + cameraPos.x;
+			float locationY = static_cast<float>(input.mouseYPos - Game::CURSOR_HEIGHT / 2) + cameraPos.y;
 
-					unitEntity->currentTarget = nullptr;
-					unitEntity->currentDestination = { locationX, locationY };
-				}
-			}
+			ParticleEmitter::getInstance().emitParticle("selectionParticle", { locationX, locationY }, Vector2D(0, 0), 2.0f);
 
-			if (unitEntity->currentDestination)
-			{
-				Vector2D direction = *unitEntity->currentDestination - transformComponent.position;
-				float distance = direction.magnitude();
-
-				if (distance > 5.0f)
-				{
-					direction = direction.normalize();
-					transformComponent.position += Vector2D(direction.x * unitEntity->speed * Game::frameLength, direction.y * unitEntity->speed * Game::frameLength);
-					unitEntity->state->setState(UnitState::WALK);
-				}
-				else
-				{
-					unitEntity->currentDestination.reset();
-					unitEntity->state->setState(UnitState::IDLE);
-				}
-			}
-			else if (unitEntity->currentTarget)
-			{
-				Vector2D direction = unitEntity->currentTarget->position - transformComponent.position;
-				float distance = direction.magnitude();
-
-				if (distance > 5.0f)
-				{
-					direction = direction.normalize();
-					transformComponent.position += Vector2D(direction.x * unitEntity->speed * Game::frameLength, direction.y * unitEntity->speed * Game::frameLength);
-					unitEntity->state->setState(UnitState::WALK);
-				}
-				else
-				{
-					unitEntity->currentTarget = nullptr;
-					unitEntity->state->setState(UnitState::IDLE);
-				}
-			}
-			else
-			{
-				unitEntity->state->setState(UnitState::IDLE);
-			}
+			unitEntity->currentTarget = nullptr;
+			unitEntity->currentDestination = { locationX, locationY };
 		}
 	}
 }
